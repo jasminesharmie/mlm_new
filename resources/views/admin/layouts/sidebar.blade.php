@@ -127,11 +127,12 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                                <a href="{{ url('admin/users') }}"
-                                    class="nav-link {{ request()->is('users') ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Users</p>
-                                </a>
+                        <li>
+                            <a href="{{ url('admin/users') }}"
+                                class="nav-link {{ request()->is('users') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Users</p>
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ url('admin/user_type') }}" class="nav-link ">

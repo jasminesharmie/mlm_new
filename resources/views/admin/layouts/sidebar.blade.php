@@ -38,6 +38,12 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('user_activate_plan') }}" class="nav-link">
+                        <i class="fas fa-trophy nav-icon"></i>
+                        <p>Plans</p>
+                    </a>
+                </li>
                 <li class="nav-item has-treeview">
                     <a href="" class="nav-link">
                         <i class="nav-icon fas fa-coins"></i>
@@ -73,6 +79,14 @@
 
                     </ul>
                 </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('admin/wallet') }}" class="nav-link">
+                        <i class="fas fa-wallet nav-icon"></i>
+                        <p>Wallet</p>
+                    </a>
+                </li>
+
                 @if(auth()->user()->user_type_id == 1)
                 <li
                     class="nav-item has-treeview {{ request()->segment(1) == 'users' || request()->is('usertype') ? 'menu-open' : '' }}">
@@ -98,14 +112,6 @@
                         </li>
                     </ul>
                 </li>
-
-                <li class="nav-item">
-                    <a href="{{ url('admin/wallet') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Wallet</p>
-                    </a>
-                </li>
-
                 <li
                     class="nav-item has-treeview {{ request()->segment(1) == 'plans' || request()->is('backup') || request()->segment(1) == 'viewsalary' ? 'menu-open' : '' }}">
                     <a href="" class="nav-link">

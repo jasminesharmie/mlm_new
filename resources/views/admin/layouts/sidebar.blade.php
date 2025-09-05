@@ -74,6 +74,12 @@
 
                     </ul>
                 </li>
+                    <li class="nav-item">
+                            <a href="{{ url('admin/wallet') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Wallet</p>
+                            </a>
+                        </li>
 
                 <li
                     class="nav-item has-treeview {{ request()->segment(1) == 'plans' || request()->is('backup') || request()->segment(1) == 'viewsalary' ? 'menu-open' : '' }}">

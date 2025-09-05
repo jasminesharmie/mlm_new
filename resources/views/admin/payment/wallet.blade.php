@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 @section('admin/content')
 @php
+
     $date = $from ?? date('Y-m-01');
     $to = $to ?? date('Y-m-d');
 @endphp
@@ -189,3 +190,4 @@
     });
 </script>
 @endsection
+

@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('content')
+@section('admin/content')
 <div class="page-wrapper">
     <div class="page-content">
         <h3>{{ auth()->user()->name }} - {{ auth()->user()->user_name }}</h3>

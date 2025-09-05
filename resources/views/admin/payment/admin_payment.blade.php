@@ -1,5 +1,9 @@
 @extends('admin.layouts.app')
+<<<<<<< HEAD
 @section('content')
+=======
+@section('admin/content')
+>>>>>>> 50bccf5691bd6e1b3dc743b5baf1ac9cb96dfbd6
 
 <div class="page-wrapper">
     <div class="page-content">

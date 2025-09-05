@@ -87,6 +87,35 @@
                     </a>
                 </li>
 
+                <li
+                    class="nav-item has-treeview {{ request()->is('admin/withdrawal*') || request()->is('viewsalary*') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->is('admin/withdrawal*') || request()->is('viewsalary*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-hand-holding-usd"></i>
+                        <p>
+                            Withdrawal
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ url('admin/withdrawal/1') }}"
+                                class="nav-link {{ request()->is('admin/withdrawal/1') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Pending</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('admin/withdrawal/2') }}"
+                                class="nav-link {{ request()->is('admin/withdrawal/2') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Completed</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
                 @if(auth()->user()->user_type_id == 1)
                 <li
                     class="nav-item has-treeview {{ request()->segment(1) == 'users' || request()->is('usertype') ? 'menu-open' : '' }}">
@@ -94,24 +123,26 @@
                         <i class="nav-icon fas fa-user"></i>
                         <p> Users
                             <i class="fas fa-angle-left right"></i>
+
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ url('admin/users') }}"
-                                class="nav-link {{ request()->is('users') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Users</p>
-                            </a>
+                                <a href="{{ url('admin/users') }}"
+                                    class="nav-link {{ request()->is('users') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Users</p>
+                                </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ url('admin/user_type') }}" class="nav-link ">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>User Type</p>
+
                             </a>
                         </li>
                     </ul>
                 </li>
+
                 <li
                     class="nav-item has-treeview {{ request()->segment(1) == 'plans' || request()->is('backup') || request()->segment(1) == 'viewsalary' ? 'menu-open' : '' }}">
                     <a href="" class="nav-link">

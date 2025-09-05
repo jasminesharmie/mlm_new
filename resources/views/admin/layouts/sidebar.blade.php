@@ -127,7 +127,8 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li>
+                        <li class="nav-item">
+
                             <a href="{{ url('admin/users') }}"
                                 class="nav-link {{ request()->is('users') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>

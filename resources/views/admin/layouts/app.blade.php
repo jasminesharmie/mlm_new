@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>{{ config('app.name') }}</title>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 <link rel="stylesheet" href="{!! asset('plugins/fontawesome-free/css/all.min.css') !!}">

@@ -690,24 +690,6 @@ public function kannanaaaaa() {
             // Get current user details
             $currentUser = DB::table('users')->where('id', $userId)->first();
 
-            // Increment coins separately
-            $shib_coin = ($currentUser->shib_coin ?? 0) + $planData->shib_coin;
-            $bonk_coin = ($currentUser->bonk_coin ?? 0) + $planData->bonk_coin;
-            $pepe_coin = ($currentUser->pepe_coin ?? 0) + $planData->pepe_coin;
-            $floki_coin = ($currentUser->floki_coin ?? 0) + $planData->floki_coin;
-            $btt_coin = ($currentUser->btt_coin ?? 0) + $planData->btt_coin;
-            $tfc_coin = ($currentUser->tfc_coin ?? 0) + $planData->tfc_coin;
-            $baby_doge_coin = ($currentUser->baby_doge_coin ?? 0) + $planData->baby_doge_coin;
-            DB::table('users')->where('id', $userId)->update([
-                'shib_coin' => $shib_coin,
-                'bonk_coin' => $bonk_coin,
-                'pepe_coin' => $pepe_coin,
-                'floki_coin' => $floki_coin,
-                'btt_coin' => $btt_coin,
-                'tfc_coin' => $tfc_coin,
-                'baby_doge_coin' => $baby_doge_coin,
-            ]);
-
             // //////////////////////  1) Sponser Income //////////////////////////
 
                 $refralupgradeCommission = ($amount * 5) / 100;
@@ -731,78 +713,6 @@ public function kannanaaaaa() {
 
 
             // // /**
-            // //  * 1. LEVEL COMMISSION (split into 10 levels equally)
-            // //  */
-                $commissionPerLevel = ($amount * $planData->level_amount) / 100;
-                $comAmount = $commissionPerLevel / $levels;
-                $referrerId = $currentUser->referral_id ?? null;
-                for ($level = 1; $level <= $levels; $level++) {
-                    if ($referrerId) {
-
-                        $perc50 = ($comAmount * 50) / 100;
-                        $perc30 = ($comAmount * 30) / 100;
-                        $perc10 = ($comAmount * 10) / 100;
-
-                        // $wallet = DB::table('users')->where('id', $referrerId)->value('wallet');
-                        // $newBalance = ($wallet ?? 0) + $comAmount;
-                        // DB::table('users')->where('id', $referrerId)->update([
-                        //     'wallet'     => $newBalance,
-                        //     'updated_at' => now(),
-                        // ]);
-
-                        $this->storeLevelPayment('Level', $planId, $userId, $referrerId, $level, '3', $comAmount, '1', "Level Income",'3');
-
-                        $this->storeLevelPayment('RebirthSplitMain',$planId,$userId, $referrerId, $level, '6',$perc30, 1, "Travel Amount Level",'3');
-                        $this->storeLevelPayment('RebirthSplitMain1',$planId,$userId,$referrerId,$level,'7',$perc50,1,"Travel Allowance",'3');
-                        $this->storeLevelPayment('RebirthSplitMain2',$planId,$userId, $referrerId, $level, '5',$perc10, 1, "Upgrade Level",'3');
-                        $this->storeLevelPayment('RebirthSplit',$planId,$userId, $referrerId, $level, '8',$perc10, 1, "Admin 10% Level Upgrade",'3');
-
-                        $share15travels = ($perc30 * 15) / 100;
-                        $share10travels = ($perc30 * 10) / 100;
-                        $share5travels = ($perc30 * 5) / 100;
-                
-                        // Store travel-related payments
-                        $this->storeLevelPayment('RebirthSplitMainTravel3',$planId,$userId,$referrerId,1,'12',$share15travels,1,"Travel International Tour",'3');
-                        $this->storeLevelPayment('RebirthSplitMainTravel4',$planId,$userId,$referrerId,1,'13',$share10travels,1,"Travel National Tour",'3');
-                        $this->storeLevelPayment('RebirthSplitMainTravel5',$planId,$userId,$referrerId,1,'14',$share5travels,1,"Travel Local Tour",'3');
-
-                        $referrer = DB::table('users')->where('id', $referrerId)->first();
-                        $referrerId = $referrer->referral_id ?? null;
-
-                    } else {
-                        // fallback to admin
-
-                        $perc50 = ($comAmount * 50) / 100;
-                        $perc30 = ($comAmount * 30) / 100;
-                        $perc10 = ($comAmount * 10) / 100;
-
-                        // $wallet = DB::table('users')->where('id', 1)->value('wallet');
-                        // $newBalance = ($wallet ?? 0) + $comAmount;
-                        // DB::table('users')->where('id', 1)->update([
-                        //     'wallet'     => $newBalance,
-                        //     'updated_at' => now(),
-                        // ]);
-
-                        $this->storeLevelPayment('Level', $planId, $userId, 1, $level, '3', $comAmount, '1', "Level Income",'3');
-
-                        $this->storeLevelPayment('RebirthSplitMain',$planId,$userId, 1, $level, '6',$perc30, 1, "Travel Amount Level",'3');
-                        $this->storeLevelPayment('RebirthSplitMain1',$planId,$userId, 1, $level,'7',$perc50,1,"Travel Allowance",'3');
-                        $this->storeLevelPayment('RebirthSplitMain2',$planId,$userId, 1, $level, '5',$perc10, 1, "Upgrade Level",'3');
-                        $this->storeLevelPayment('RebirthSplit',$planId,$userId, 1, $level, '8',$perc10, 1, "Admin 10% Level Upgrade",'3');
-
-                        $share15travels = ($perc30 * 15) / 100;
-                        $share10travels = ($perc30 * 10) / 100;
-                        $share5travels = ($perc30 * 5) / 100;
-                
-                        // Store travel-related payments
-                        $this->storeLevelPayment('RebirthSplitMainTravel3',$planId,$userId,1,1,'12',$share15travels,1,"Travel International Tour",'3');
-                        $this->storeLevelPayment('RebirthSplitMainTravel4',$planId,$userId,1,1,'13',$share10travels,1,"Travel National Tour",'3');
-                        $this->storeLevelPayment('RebirthSplitMainTravel5',$planId,$userId,1,1,'14',$share5travels,1,"Travel Local Tour",'3');
-
-                    }
-                }
-
-            // // /**
             // //  * 4. UPLINE COMMISSION
             // //  */
                 $commissionAmount = ($amount * $planData->upline_amount) / 100;
@@ -821,27 +731,11 @@ public function kannanaaaaa() {
                     $uplinerId = 1; // admin fallback
                 }
 
-                $perca50 = ($commissionAmount * 50) / 100;
-                $perca30 = ($commissionAmount * 30) / 100;
-                $perca10 = ($commissionAmount * 10) / 100;
-
-                //dd($perca50,$perca30,$perca10);
+               
 
                 $this->storeUplinePayment('Upline', $planId, $userId, $uplinerId, $planId, '4', $commissionAmount, 1, "Upline Sponser",'3');
 
-                $this->storeUplinePayment('RebirthSplitMain',$planId,$userId, $uplinerId, $planId, '6',$perca30, 1, "Travel Amount Upline",'3');
-                $this->storeUplinePayment('RebirthSplitMain1',$planId,$userId,$uplinerId,$planId,'7',$perca50,1,"Travel Allowance Upline",'3');
-                $this->storeUplinePayment('RebirthSplitMain2',$planId,$userId, $uplinerId, $planId, '5',$perca10, 1, "Upline Sponser Income",'3');
-                $this->storeUplinePayment('RebirthSplit',$planId,$userId, $uplinerId, $planId, '8',$perca10, 1, "Admin 10% Upline Upgrade",'3');
-
-                $share15travel = ($perca30 * 15) / 100;
-                $share10travel = ($perca30 * 10) / 100;
-                $share5travel = ($perca30 * 5) / 100;
-
-                $this->storeUplinePayment('RebirthSplitMainTravel3',$planId,$userId,$uplinerId,$planId,'12',$share15travel,1,"Travel International Tour Upline",'3');
-                $this->storeUplinePayment('RebirthSplitMainTravel4',$planId,$userId,$uplinerId,$planId,'13',$share10travel,1,"Travel National Tour Upline",'3');
-                $this->storeUplinePayment('RebirthSplitMainTravel5',$planId,$userId,$uplinerId,$planId,'14',$share5travel,1,"Travel Local Tour Upline",'3');
-
+               
 
             // ////////////////////////////////// 2) Global Regain /////////////////////////////////
             // // . ===== NEW: Rotating 20% commission per plan (Admin -> #1 -> #2 ... per 20 purchases) =====
@@ -876,34 +770,9 @@ public function kannanaaaaa() {
                     ]);
 
                    
-                        $total = ((($amount * 20) / 100) * 20) - $amount;
+                        $total = ((($amount * 20) / 100) * 5) - $amount;
                     
-                        // Calculate the splits
-                        $share40 = ($total * 40) / 100;
-                        $share30 = ($total * 30) / 100;
-                        $share20 = ($total * 20) / 100;
-                        $share10 = ($total * 10) / 100;
-                
-                        // Store the main rebirth splits
-                        $this->storeGlobalPayment('RebirthSplitMain',$planId,$parentId,$userId,1,'6',$share40,1,"Travel Amount Global Rebirth Income",'3',1);
-                        $this->storeGlobalPayment('RebirthSplitMain1',$planId,$parentId,$userId,1,'7',$share40,1,"Travel Allowance Global Rebirth Income",'3',1);
-                        $this->storeGlobalPayment('RebirthSplitMain2',$planId,$parentId,$userId,1,'5',$share10,1,"Upgrade Global Rebirth Income",'3',1);
-                        $this->storeGlobalPayment('RebirthSplit',$planId,$parentId,1,1,'8',$share10,1,"Admin 10% Global Rebirth Income",'3',1);
-                
-                        // Calculate travel splits
-                        $share50travel = ($share40 * 50) / 100;
-                        $share30travel = ($share30 * 30) / 100;
-                        $share20travel = ($share20 * 10) / 100;
-                
-                        // Store travel-related payments
-                        $this->storeGlobalPayment('RebirthSplitMainTravel3',$planId,$parentId,$userId,1,'12',$share50travel,1,"Travel International Tour Global Rebirth Income",'3',1);
-                        $this->storeGlobalPayment('RebirthSplitMainTravel4',$planId,$parentId,$userId,1,'13',$share30travel,1,"Travel National Tour Global Rebirth Income",'3',1);
-                        $this->storeGlobalPayment('RebirthSplitMainTravel5',$planId,$parentId,$userId,1,'14',$share20travel,1,"Travel Local Tour Global Rebirth Income",'3',1);
-                
-                        $this->storeGlobalPayment('RebirthSplitMainTravel',$planId,$parentId,$userId,1,'9',$share50travel,1,"Travel Allowance International Tour Global Rebirth Income",'3',1);
-                        $this->storeGlobalPayment('RebirthSplitMainTravel1',$planId,$parentId,$userId,1,'10',$share30travel,1,"Travel Allowance National Tour Global Rebirth Income",'3',1);
-                        $this->storeGlobalPayment('RebirthSplitMainTravel2',$planId,$parentId,$userId,1,'11',$share20travel,1,"Travel Local Tour Global Rebirth Income",'3',1);
-                
+                       
                         // Reset beneficiary's global rebirth amount
                         $GBA = DB::table('users')->where('id', $parentId)->value('global_rebirth_amount');
                         $newBalance = $GBA - $amount;
@@ -979,52 +848,12 @@ public function kannanaaaaa() {
     // The reusable core activation logic
     protected function repeatPlanPayment($userId, $amount, $planId,  $levels, $upgrade)
     {
-        // // Store the activated plan (capture id for ordering if needed)
-        // DB::table('user_plan')->insert([
-        //     'plan_id'    => $planId,
-        //     'user_id'    => $userId,
-        //     'amount'     => $amount,
-        //     'created_by' => auth()->id(),
-        //     'created_at' => now(),
-        // ]);
 
         $planData = DB::table('plans')->where('id',$planId)->first();
 
-        // if($upgrade_status == 1){
-        //     $totup = $upgrade - $planData->plan_amount;
-        //     DB::table('users')->where('id', $userId)->update([
-        //         'upgrade'        => $totup,
-        //     ]);
-        // }
-
-        // Update user to latest plan
-        // DB::table('users')->where('id', $userId)->update([
-        //     'plan_id'    => $planId,
-        //     'status'     => 1,
-        //     'updated_at' => now(),
-        // ]);
-        
-        
+       
         // Get current user details
         $currentUser = DB::table('users')->where('id', $userId)->first();
-
-        // Increment coins separately
-        $shib_coin = ($currentUser->shib_coin ?? 0) + $planData->shib_coin;
-        $bonk_coin = ($currentUser->bonk_coin ?? 0) + $planData->bonk_coin;
-        $pepe_coin = ($currentUser->pepe_coin ?? 0) + $planData->pepe_coin;
-        $floki_coin = ($currentUser->floki_coin ?? 0) + $planData->floki_coin;
-        $btt_coin = ($currentUser->btt_coin ?? 0) + $planData->btt_coin;
-        $tfc_coin = ($currentUser->tfc_coin ?? 0) + $planData->tfc_coin;
-        $baby_doge_coin = ($currentUser->baby_doge_coin ?? 0) + $planData->baby_doge_coin;
-        DB::table('users')->where('id', $userId)->update([
-            'shib_coin' => $shib_coin,
-            'bonk_coin' => $bonk_coin,
-            'pepe_coin' => $pepe_coin,
-            'floki_coin' => $floki_coin,
-            'btt_coin' => $btt_coin,
-            'tfc_coin' => $tfc_coin,
-            'baby_doge_coin' => $baby_doge_coin,
-        ]);
 
         // //////////////////////  1) Sponser Income //////////////////////////
 
@@ -1049,78 +878,7 @@ public function kannanaaaaa() {
 
         
 
-        // // /**
-        // //  * 1. LEVEL COMMISSION (split into 10 levels equally)
-        // //  */
-            $commissionPerLevel = ($amount * $planData->level_amount) / 100;
-            $comAmount = $commissionPerLevel / $levels;
-            $referrerId = $currentUser->referral_id ?? null;
-            for ($level = 1; $level <= $levels; $level++) {
-                if ($referrerId) {
-
-                    $perc50 = ($comAmount * 50) / 100;
-                    $perc30 = ($comAmount * 30) / 100;
-                    $perc10 = ($comAmount * 10) / 100;
-
-                    // $wallet = DB::table('users')->where('id', $referrerId)->value('wallet');
-                    // $newBalance = ($wallet ?? 0) + $comAmount;
-                    // DB::table('users')->where('id', $referrerId)->update([
-                    //     'wallet'     => $newBalance,
-                    //     'updated_at' => now(),
-                    // ]);
-
-                    $this->storeLevelPayment('Level', $planId, $userId, $referrerId, $level, '3', $comAmount, '1', "Level Income - Global Regain",'4');
-
-                    $this->storeLevelPayment('RebirthSplitMain',$planId,$userId, $referrerId, $level, '6',$perc30, 1, "Travel Amount Level - Global Regain",'4');
-                    $this->storeLevelPayment('RebirthSplitMain1',$planId,$userId,$referrerId,$level,'7',$perc50,1,"Travel Allowance - Global Regain",'4');
-                    $this->storeLevelPayment('RebirthSplitMain2',$planId,$userId, $referrerId, $level, '5',$perc10, 1, "Upgrade Level - Global Regain",'4');
-                    $this->storeLevelPayment('RebirthSplit',$planId,$userId, $referrerId, $level, '8',$perc10, 1, "Admin 10% Level Upgrade - Global Regain",'4');
-
-                    $share15travels = ($perc30 * 15) / 100;
-                    $share10travels = ($perc30 * 10) / 100;
-                    $share5travels = ($perc30 * 5) / 100;
-            
-                    // Store travel-related payments
-                    $this->storeLevelPayment('RebirthSplitMainTravel3',$planId,$userId,$referrerId,1,'12',$share15travels,1,"Travel International Tour - Global Regain",'4');
-                    $this->storeLevelPayment('RebirthSplitMainTravel4',$planId,$userId,$referrerId,1,'13',$share10travels,1,"Travel National Tour - Global Regain",'4');
-                    $this->storeLevelPayment('RebirthSplitMainTravel5',$planId,$userId,$referrerId,1,'14',$share5travels,1,"Travel Local Tour - Global Regain",'4');
-
-                    $referrer = DB::table('users')->where('id', $referrerId)->first();
-                    $referrerId = $referrer->referral_id ?? null;
-
-                } else {
-                    // fallback to admin
-
-                    $perc50 = ($comAmount * 50) / 100;
-                    $perc30 = ($comAmount * 30) / 100;
-                    $perc10 = ($comAmount * 10) / 100;
-
-                    // $wallet = DB::table('users')->where('id', 1)->value('wallet');
-                    // $newBalance = ($wallet ?? 0) + $comAmount;
-                    // DB::table('users')->where('id', 1)->update([
-                    //     'wallet'     => $newBalance,
-                    //     'updated_at' => now(),
-                    // ]);
-
-                    $this->storeLevelPayment('Level', $planId, $userId, 1, $level, '3', $comAmount, '1', "Level Income - Global Regain",'4');
-
-                    $this->storeLevelPayment('RebirthSplitMain',$planId,$userId, 1, $level, '6',$perc30, 1, "Travel Amount Level - Global Regain",'4');
-                    $this->storeLevelPayment('RebirthSplitMain1',$planId,$userId, 1, $level,'7',$perc50,1,"Travel Allowance - Global Regain",'4');
-                    $this->storeLevelPayment('RebirthSplitMain2',$planId,$userId, 1, $level, '5',$perc10, 1, "Upgrade Level - Global Regain",'4');
-                    $this->storeLevelPayment('RebirthSplit',$planId,$userId, 1, $level, '8',$perc10, 1, "Admin 10% Level Upgrade - Global Regain",'4');
-
-                    $share15travels = ($perc30 * 15) / 100;
-                    $share10travels = ($perc30 * 10) / 100;
-                    $share5travels = ($perc30 * 5) / 100;
-            
-                    // Store travel-related payments
-                    $this->storeLevelPayment('RebirthSplitMainTravel3',$planId,$userId,1,1,'12',$share15travels,1,"Travel International Tour - Global Regain",'4');
-                    $this->storeLevelPayment('RebirthSplitMainTravel4',$planId,$userId,1,1,'13',$share10travels,1,"Travel National Tour - Global Regain",'4');
-                    $this->storeLevelPayment('RebirthSplitMainTravel5',$planId,$userId,1,1,'14',$share5travels,1,"Travel Local Tour - Global Regain",'4');
-
-                }
-            }
-
+       
         // // /**
         // //  * 4. UPLINE COMMISSION
         // //  */
@@ -1140,28 +898,7 @@ public function kannanaaaaa() {
             $uplinerId = 1; // admin fallback
         }
 
-        $perca50 = ($commissionAmount * 50) / 100;
-        $perca30 = ($commissionAmount * 30) / 100;
-        $perca10 = ($commissionAmount * 10) / 100;
-
-        //dd($perca50,$perca30,$perca10);
-
-        $this->storeUplinePayment('Upline', $planId, $userId, $uplinerId, $planId, '4', $commissionAmount, 1, "Upline Sponser - Global Regain",'4');
-
-        $this->storeUplinePayment('RebirthSplitMain',$planId,$userId, $uplinerId, $planId, '6',$perca30, 1, "Travel Amount Upline - Global Regain",'4');
-        $this->storeUplinePayment('RebirthSplitMain1',$planId,$userId,$uplinerId,$planId,'7',$perca50,1,"Travel Allowance Upline - Global Regain",'4');
-        $this->storeUplinePayment('RebirthSplitMain2',$planId,$userId, $uplinerId, $planId, '5',$perca10, 1, "Upline Sponser Income - Global Regain",'4');
-        $this->storeUplinePayment('RebirthSplit',$planId,$userId, $uplinerId, $planId, '8',$perca10, 1, "Admin 10% Upline Upgrade - Global Regain",'4');
-
-        $share15travel = ($perca30 * 15) / 100;
-        $share10travel = ($perca30 * 10) / 100;
-        $share5travel = ($perca30 * 5) / 100;
-
-        $this->storeUplinePayment('RebirthSplitMainTravel3',$planId,$userId,$uplinerId,$planId,'12',$share15travel,1,"Travel International Tour Upline - Global Regain",'4');
-        $this->storeUplinePayment('RebirthSplitMainTravel4',$planId,$userId,$uplinerId,$planId,'13',$share10travel,1,"Travel National Tour Upline - Global Regain",'4');
-        $this->storeUplinePayment('RebirthSplitMainTravel5',$planId,$userId,$uplinerId,$planId,'14',$share5travel,1,"Travel Local Tour Upline - Global Regain",'4');
-
-
+       
         // ////////////////////////////////// 2) Global Regain /////////////////////////////////
         // // . ===== NEW: Rotating 20% commission per plan (Admin -> #1 -> #2 ... per 20 purchases) =====
             $rotatingPercent = $planData->regain_amount; 
@@ -1191,34 +928,9 @@ public function kannanaaaaa() {
                     'status'        => 1,
                 ]);
 
-                    $total = ((($amount * 20) / 100) * 20) - $amount;
+                    $total = ((($amount * 20) / 100) * 5) - $amount;
 
-                    // Calculate the splits
-                    $share40 = ($total * 40) / 100;
-                    $share30 = ($total * 30) / 100;
-                    $share20 = ($total * 20) / 100;
-                    $share10 = ($total * 10) / 100;
-            
-                    // Store the main rebirth splits
-                    $this->storeGlobalPayment('RebirthSplitMain',$planId,$parentId,$userId,1,'6',$share40,1,"Travel Amount - Global Regain",'4',1);
-                    $this->storeGlobalPayment('RebirthSplitMain1',$planId,$parentId,$userId,1,'7',$share40,1,"Travel Allowance - Global Regain",'4',1);
-                    $this->storeGlobalPayment('RebirthSplitMain2',$planId,$parentId,$userId,1,'5',$share10,1,"Upgrade - Global Regain",'4',1);
-                    $this->storeGlobalPayment('RebirthSplit',$planId,$parentId,1,1,'8',$share10,1,"Admin 10% - Global Regain",'4');
-            
-                    // Calculate travel splits
-                    $share50travel = ($share40 * 50) / 100;
-                    $share30travel = ($share30 * 30) / 100;
-                    $share20travel = ($share20 * 10) / 100;
-            
-                    // Store travel-related payments
-                    $this->storeGlobalPayment('RebirthSplitMainTravel3',$planId,$parentId,$userId,1,'12',$share50travel,1,"Travel International Tour - Global Regain",'4',1);
-                    $this->storeGlobalPayment('RebirthSplitMainTravel4',$planId,$parentId,$userId,1,'13',$share30travel,1,"Travel National Tour - Global Regain",'4',1);
-                    $this->storeGlobalPayment('RebirthSplitMainTravel5',$planId,$parentId,$userId,1,'14',$share20travel,1,"Travel Local Tour - Global Regain",'4',1);
-            
-                    $this->storeGlobalPayment('RebirthSplitMainTravel',$planId,$parentId,$userId,1,'9',$share50travel,1,"Travel Allowance International Tour - Global Regain",'4',1);
-                    $this->storeGlobalPayment('RebirthSplitMainTravel1',$planId,$parentId,$userId,1,'10',$share30travel,1,"Travel Allowance National Tour - Global Regain",'4',1);
-                    $this->storeGlobalPayment('RebirthSplitMainTravel2',$planId,$parentId,$userId,1,'11',$share20travel,1,"Travel Local Tour - Global Regain",'4',1);
-            
+                  
                     // Reset beneficiary's global rebirth amount
                     $GBA = DB::table('users')->where('id', $parentId)->value('global_rebirth_amount');
                     $newBalance = $GBA - $amount;

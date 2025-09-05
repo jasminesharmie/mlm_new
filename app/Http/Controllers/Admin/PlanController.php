@@ -171,16 +171,8 @@ public function kannanaaaaa() {
           'plan_name'         => $request->plan_name,
           'plan_amount'       => $request->plan_amount,
           'sponser_amount'    => $request->sponser_amount,
-          'level_amount'      => $request->level_amount,
           'upline_amount'     => $request->upline_amount,
           'regain_amount'     => $request->regain_amount,
-          'shib_coin'         => $request->shib_coin,
-          'pepe_coin'         => $request->pepe_coin,
-          'bonk_coin'         => $request->bonk_coin,
-          'floki_coin'        => $request->floki_coin,
-          'btt_coin'          => $request->btt_coin,
-          'baby_doge_coin'    => $request->baby_doge_coin,
-          'tfc_coin'          => $request->tfc_coin,
           'status'            => 1,
           'created_at'        => now(),
       ]);
@@ -202,16 +194,8 @@ public function kannanaaaaa() {
         'plan_name'         => $request->plan_name,
         'plan_amount'       => $request->plan_amount,
         'sponser_amount'    => $request->sponser_amount,
-        'level_amount'      => $request->level_amount,
         'upline_amount'     => $request->upline_amount,
         'regain_amount'     => $request->regain_amount,
-        'shib_coin'         => $request->shib_coin,
-		'pepe_coin'         => $request->pepe_coin,
-		'bonk_coin'         => $request->bonk_coin,
-		'floki_coin'        => $request->floki_coin,
-		'btt_coin'          => $request->btt_coin,
-		'baby_doge_coin'    => $request->baby_doge_coin,
-		'tfc_coin'          => $request->tfc_coin,
         'status'            => $request->status,
         'updated_at'        => now(),
     ] );
@@ -374,78 +358,6 @@ public function kannanaaaaa() {
   }
 
 
-  public static function storeLevelPayment($type, $planId, $fromId, $toId, $level, $reasonId, $amount, $paymentStatus, $message, $user_type_id)
-  {
-    DB::table('level_income')->insert([
-        'plan_id'        => $planId,
-        'from_id'        => $fromId,
-        'to_id'          => $toId,
-        'level'          => $level,
-        'pay_reason_id'  => $reasonId,
-        'amount'         => $amount,
-        'payment_status' => $paymentStatus,
-        'message'        => $message,
-        'user_type_id'   => $user_type_id,
-        'log_id'         => auth()->id(),
-        'created_at'     => now(),
-    ]);
-
-    if($type == 'RebirthSplitMain'){
-        $travel_amount = DB::table('users')->where('id', $toId)->value('travel_amount');
-        $travelBalance = ($travel_amount ?? 0) + $amount;
-        DB::table('users')->where('id', $toId)->update([
-            'travel_amount'  => $travelBalance,
-            'updated_at' => now(),
-        ]);
-    }
-
-    if($type == 'RebirthSplitMain1'){
-        $travel_allownace = DB::table('users')->where('id', $toId)->value('travel_allownace');
-        $travelalloBalance = ($travel_allownace ?? 0) + $amount;
-        DB::table('users')->where('id', $toId)->update([
-            'travel_allownace'  => $travelalloBalance,
-            'updated_at' => now(),
-        ]);
-    }
-
-    if($type == 'RebirthSplitMain2'){
-        $upgrade = DB::table('users')->where('id', $toId)->value('upgrade');
-        $upgradeBalance = ($upgrade ?? 0) + $amount;
-        DB::table('users')->where('id', $toId)->update([
-            'upgrade'  => $upgradeBalance,
-            'updated_at' => now(),
-        ]);
-    }
-
-    if($type == 'RebirthSplitMainTravel3'){
-        $travel_international_tour = DB::table('users')->where('id', $toId)->value('travel_international_tour');
-        $tintBalance = ($travel_international_tour ?? 0) + $amount;
-        DB::table('users')->where('id', $toId)->update([
-            'travel_international_tour'  => $tintBalance,
-            'updated_at' => now(),
-        ]);
-      }
-
-      if($type == 'RebirthSplitMainTravel4'){
-        $travel_national_tour = DB::table('users')->where('id', $toId)->value('travel_national_tour');
-        $tnatBalance = ($travel_national_tour ?? 0) + $amount;
-        DB::table('users')->where('id', $toId)->update([
-            'travel_national_tour'  => $tnatBalance,
-            'updated_at' => now(),
-        ]);
-      }
-
-      if($type == 'RebirthSplitMainTravel5'){
-        $travel_local_tour = DB::table('users')->where('id', $toId)->value('travel_local_tour');
-        $tlocBalance = ($travel_local_tour ?? 0) + $amount;
-        DB::table('users')->where('id', $toId)->update([
-            'travel_local_tour'  => $tlocBalance,
-            'updated_at' => now(),
-        ]);
-      }
-    
-
-  }
 
   public static function storeUplinePayment($type, $planId, $fromId, $toId, $level, $reasonId, $amount, $paymentStatus, $message, $user_type_id)
   {
@@ -464,23 +376,7 @@ public function kannanaaaaa() {
     ]);
 
 
-      if($type == 'RebirthSplitMain'){
-        $travel_amount = DB::table('users')->where('id', $toId)->value('travel_amount');
-        $travelBalance = ($travel_amount ?? 0) + $amount;
-        DB::table('users')->where('id', $toId)->update([
-            'travel_amount'  => $travelBalance,
-            'updated_at' => now(),
-        ]);
-      }
-
-      if($type == 'RebirthSplitMain1'){
-        $travel_allownace = DB::table('users')->where('id', $toId)->value('travel_allownace');
-        $travelalloBalance = ($travel_allownace ?? 0) + $amount;
-        DB::table('users')->where('id', $toId)->update([
-            'travel_allownace'  => $travelalloBalance,
-            'updated_at' => now(),
-        ]);
-      }
+      
 
       if($type == 'RebirthSplitMain2'){
         $upgrade = DB::table('users')->where('id', $toId)->value('upgrade');
@@ -491,32 +387,6 @@ public function kannanaaaaa() {
         ]);
       }
 
-      if($type == 'RebirthSplitMainTravel3'){
-        $travel_international_tour = DB::table('users')->where('id', $toId)->value('travel_international_tour');
-        $tintBalance = ($travel_international_tour ?? 0) + $amount;
-        DB::table('users')->where('id', $toId)->update([
-            'travel_international_tour'  => $tintBalance,
-            'updated_at' => now(),
-        ]);
-      }
-
-      if($type == 'RebirthSplitMainTravel4'){
-        $travel_national_tour = DB::table('users')->where('id', $toId)->value('travel_national_tour');
-        $tnatBalance = ($travel_national_tour ?? 0) + $amount;
-        DB::table('users')->where('id', $toId)->update([
-            'travel_national_tour'  => $tnatBalance,
-            'updated_at' => now(),
-        ]);
-      }
-
-      if($type == 'RebirthSplitMainTravel5'){
-        $travel_local_tour = DB::table('users')->where('id', $toId)->value('travel_local_tour');
-        $tlocBalance = ($travel_local_tour ?? 0) + $amount;
-        DB::table('users')->where('id', $toId)->update([
-            'travel_local_tour'  => $tlocBalance,
-            'updated_at' => now(),
-        ]);
-      }
   }
 
   public static function storeGlobalPayment($type, $planId, $fromId, $toId, $level, $reasonId, $amount, $paymentStatus, $message, $user_type_id, $gbAmount)
@@ -546,23 +416,6 @@ public function kannanaaaaa() {
         ]);
       }
 
-      if($type == 'RebirthSplitMain'){
-        $travel_amount = DB::table('users')->where('id', $fromId)->value('travel_amount');
-        $travelBalance = ($travel_amount ?? 0) + $amount;
-        DB::table('users')->where('id', $fromId)->update([
-            'travel_amount'  => $travelBalance,
-            'updated_at' => now(),
-        ]);
-      }
-
-      if($type == 'RebirthSplitMain1'){
-        $travel_allownace = DB::table('users')->where('id', $fromId)->value('travel_allownace');
-        $travelalloBalance = ($travel_allownace ?? 0) + $amount;
-        DB::table('users')->where('id', $fromId)->update([
-            'travel_allownace'  => $travelalloBalance,
-            'updated_at' => now(),
-        ]);
-      }
 
       if($type == 'RebirthSplitMain2'){
         $upgrade = DB::table('users')->where('id', $fromId)->value('upgrade');
@@ -573,59 +426,6 @@ public function kannanaaaaa() {
         ]);
       }
 
-      if($type == 'RebirthSplitMainTravel'){
-        $ta_international_tour = DB::table('users')->where('id', $fromId)->value('ta_international_tour');
-        $taintBalance = ($ta_international_tour ?? 0) + $amount;
-        DB::table('users')->where('id', $fromId)->update([
-            'ta_international_tour'  => $taintBalance,
-            'updated_at' => now(),
-        ]);
-      }
-
-      if($type == 'RebirthSplitMainTravel1'){
-        $ta_national_tour = DB::table('users')->where('id', $fromId)->value('ta_national_tour');
-        $tanatBalance = ($ta_national_tour ?? 0) + $amount;
-        DB::table('users')->where('id', $fromId)->update([
-            'ta_national_tour'  => $tanatBalance,
-            'updated_at' => now(),
-        ]);
-      }
-
-      if($type == 'RebirthSplitMainTravel2'){
-        $ta_local_tour = DB::table('users')->where('id', $fromId)->value('ta_local_tour');
-        $talocBalance = ($ta_local_tour ?? 0) + $amount;
-        DB::table('users')->where('id', $fromId)->update([
-            'ta_local_tour'  => $talocBalance,
-            'updated_at' => now(),
-        ]);
-      }
-      if($type == 'RebirthSplitMainTravel3'){
-        $travel_international_tour = DB::table('users')->where('id', $fromId)->value('travel_international_tour');
-        $tintBalance = ($travel_international_tour ?? 0) + $amount;
-        DB::table('users')->where('id', $fromId)->update([
-            'travel_international_tour'  => $tintBalance,
-            'updated_at' => now(),
-        ]);
-      }
-
-      if($type == 'RebirthSplitMainTravel4'){
-        $travel_national_tour = DB::table('users')->where('id', $fromId)->value('travel_national_tour');
-        $tnatBalance = ($travel_national_tour ?? 0) + $amount;
-        DB::table('users')->where('id', $fromId)->update([
-            'travel_national_tour'  => $tnatBalance,
-            'updated_at' => now(),
-        ]);
-      }
-
-      if($type == 'RebirthSplitMainTravel5'){
-        $travel_local_tour = DB::table('users')->where('id', $fromId)->value('travel_local_tour');
-        $tlocBalance = ($travel_local_tour ?? 0) + $amount;
-        DB::table('users')->where('id', $fromId)->update([
-            'travel_local_tour'  => $tlocBalance,
-            'updated_at' => now(),
-        ]);
-      }
-    
   }
 
 
@@ -658,9 +458,9 @@ public function kannanaaaaa() {
         $planId = $request->plan_id;
         $upgrade = $request->upgrade;
         $upgrade_status = $request->upgrade_status;
-        $levels = 10;
+       
 
-        return DB::transaction(function () use ($userId, $amount, $planId, $levels, $upgrade, $upgrade_status) {
+        return DB::transaction(function () use ($userId, $amount, $planId, $upgrade, $upgrade_status) {
 
             // Store the activated plan (capture id for ordering if needed)
             DB::table('user_plan')->insert([
@@ -811,7 +611,7 @@ public function kannanaaaaa() {
                                     'created_at' => now(),
                                 ]);
 
-                                $this->repeatPlanPayment($newUId, $amount, $planId, $levels, $upgrade);
+                                $this->repeatPlanPayment($newUId, $amount, $planId, $upgrade);
 
                             } else {
 
@@ -826,7 +626,7 @@ public function kannanaaaaa() {
                                     'created_at' => now(),
                                 ]);
 
-                                $this->repeatPlanPayment($rebirthUser->id, $amount, $planId, $levels, $upgrade);
+                                $this->repeatPlanPayment($rebirthUser->id, $amount, $planId, $upgrade);
                             }
                 
                         }                      
@@ -846,7 +646,7 @@ public function kannanaaaaa() {
     }
 
     // The reusable core activation logic
-    protected function repeatPlanPayment($userId, $amount, $planId,  $levels, $upgrade)
+    protected function repeatPlanPayment($userId, $amount, $planId, $upgrade)
     {
 
         $planData = DB::table('plans')->where('id',$planId)->first();
@@ -969,7 +769,7 @@ public function kannanaaaaa() {
                                 'created_at' => now(),
                             ]);
 
-                            $this->repeatPlanPayment($newUId, $amount, $planId, $levels, $upgrade);
+                            $this->repeatPlanPayment($newUId, $amount, $planId, $upgrade);
 
                         } else {
 
@@ -984,11 +784,11 @@ public function kannanaaaaa() {
                                 'created_at' => now(),
                             ]);
 
-                            $this->repeatPlanPayment($rebirthUser->id, $amount, $planId, $levels, $upgrade);
+                            $this->repeatPlanPayment($rebirthUser->id, $amount, $planId, $upgrade);
                         }
             
     
-                        $this->repeatPlanPayment($newId, $amount, $planId, $levels, $upgrade);
+                        $this->repeatPlanPayment($newId, $amount, $planId, $upgrade);
                     }                      
                 
             } else {

@@ -42,17 +42,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Level Income</td>
-                                    <td>{{ date('d-m-Y') }}</td>
-                                    <td>{{ $levelIncome }} $</td>
-                                    <td>
-                                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#paymentModal">
-                                            <i class="fa fa-arrow-right"></i> Move to Wallet
-                                        </button>
-                                    </td>
-                                </tr>
+                                
                                 <tr>
                                     <td>2</td>
                                     <td>Sponsor Income</td>
@@ -81,29 +71,7 @@
                 </div>
             </div>
 
-            <!-- Level Income Modal -->
-            <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-md" role="document">
-                    <div class="modal-content">
-                        <form action="{{ url('admin/updatewallet_level') }}" method="POST">
-                            @csrf
-                            <div class="modal-header bg-info">
-                                <h5 class="modal-title" id="paymentModalLabel">Confirm Transfer</h5>
-                                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body text-center">
-                                <input type="hidden" name="user_id" value="{{ Auth::id() }}">
-                                <input type="hidden" name="amount" value="{{ $levelIncome }}">
-                                <p>Are you sure you want to transfer <b>{{ $levelIncome }} $</b> to your wallet?</p>
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Yes, Continue</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+           
 
             <!-- Sponsor Income Modal -->
             <div class="modal fade" id="paymentModal1" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel1" aria-hidden="true">

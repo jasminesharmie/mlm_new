@@ -20,22 +20,6 @@ class PaymentController extends Controller
 
   public function adminPayment()
   {
-    $levelQuery = DB::table('level_income')
-        ->join('users as from_users', 'from_users.id', '=', 'level_income.from_id')
-        ->join('users as to_users', 'to_users.id', '=', 'level_income.to_id')
-        ->join('payment_reason', 'payment_reason.id', '=', 'level_income.pay_reason_id')
-        ->select(
-            'level_income.*',
-            'from_users.user_name as from_username',
-            'from_users.name',
-            'to_users.user_name as to_username',
-            'payment_reason.name as reasonname'
-        )
-        ->where('level_income.pay_reason_id', 8) 
-        ->where('level_income.to_id', 1)
-        ->orderBy('level_income.id', 'desc')
-        ->get();
-
     $sponserQuery = DB::table('sponser_income')
         ->join('users as from_users', 'from_users.id', '=', 'sponser_income.from_id')
         ->join('users as to_users', 'to_users.id', '=', 'sponser_income.to_id')
@@ -85,7 +69,6 @@ class PaymentController extends Controller
         ->get();
 
     return view('admin.payment.admin_payment', [
-        'levelQuery' => $levelQuery,
         'sponserQuery' => $sponserQuery,
         'uplineQuery' => $uplineQuery,
         'globalQuery' => $globalQuery,
@@ -209,41 +192,7 @@ public function getData(Request $request)
 }
 
   
-  public function level(Request $request)
-  {
-      $from = $request->input('from', date('Y-m-01'));
-      $to = $request->input('to', date('Y-m-d'));
-      $search = $request->input('search', '');
-      $pageper = $request->input('pageper', 25);
-  
-      $levels = DB::table('level_income')
-          ->select('level_income.*', 'users.name as username', 'u2.name as from_username', 'payment_reason.name as reasonname')
-          ->join('users', 'users.id', '=', 'level_income.to_id')
-          ->join('users as u2', 'u2.id', '=', 'level_income.from_id')
-          ->join('payment_reason', 'payment_reason.id', '=', 'level_income.pay_reason_id')
-          ->where('level_income.pay_reason_id', 3)
-          ->when(auth()->user()->id != 1, function ($query) {
-              $query->where('level_income.to_id', auth()->user()->id);
-          })
-          ->when($from, function ($query) use ($from) {
-              $query->whereDate('level_income.created_at', '>=', $from);
-          })
-          ->when($to, function ($query) use ($to) {
-              $query->whereDate('level_income.created_at', '<=', $to);
-          })
-          ->when($search, function ($query) use ($search) {
-              $query->where(function ($q) use ($search) {
-                  $q->where('u2.name', 'like', "%$search%")
-                    ->orWhere('users.name', 'like', "%$search%")
-                    ->orWhere('level_income.amount', 'like', "%$search%");
-              });
-          })
-          ->orderBy('level_income.id', 'desc')
-          ->paginate($pageper);
-        $plans = DB::table('plans')->orderBy('id', 'asc')->get();
-  
-      return view('admin.payment.level', compact('levels', 'from', 'to', 'search', 'pageper','plans'));
-  }
+ 
   
 
   public function upline_spornser(Request $request)
@@ -301,50 +250,10 @@ public function getData(Request $request)
 			->where('to_id', auth()->user()->id)
 			->sum('amount');
 			
-		$levelIncome = DB::table('level_income')
-			->where('to_id', auth()->user()->id)
-            ->where('widtdrawal_status', '0')
-			->where('pay_reason_id', '3')
-			->sum('amount');
 			
-		  return view('admin.payment.wallet', compact( 'sponserIncome', 'levelIncome'));
+		  return view('admin.payment.wallet', compact( 'sponserIncome'));
 	}
 
-  public function updatewallet_level(Request $request)
-{
-    $userId = auth()->user()->id;
-
-    
-    $levelIncome = DB::table('level_income')
-        ->where('to_id', $userId)
-        ->where('widtdrawal_status', '0')
-        ->where('pay_reason_id', '3')
-        ->sum('amount');
-
-    if ($levelIncome > 0) {
-       
-        DB::table('users')
-            ->where('id', $userId)
-            ->increment('wallet', $levelIncome);
-
-        DB::table('level_income')
-            ->where('to_id', $userId)
-            ->where('widtdrawal_status', '0')
-            ->where('pay_reason_id', '3')
-            ->update(['widtdrawal_status' => '1']);
-    }
-
-    DB::table('wallet')->insert([
-        'user_id'           => auth()->user()->id,
-        'wallet_amount'     => $request->amount,
-        'type'              => 'level_income',
-        'status'            => 1,
-        'created_at'        => now(),
-    ]);
-    
-
-    return redirect()->back()->with('success','Wallet Moved Successfull');
-}
 
 
 public function updatewallet_sponser(Request $request)
@@ -479,41 +388,6 @@ public function updatewallet_sponser(Request $request)
         $from = $request->input('from', date('Y-m-01'));
         $to = $request->input('to', date('Y-m-d'));
         $search = $request->input('search', '');
-
-        $levelQuery = DB::table('level_income')
-            ->join('users as from_users', 'from_users.id', '=', 'level_income.from_id')
-            ->join('users as to_users', 'to_users.id', '=', 'level_income.to_id')
-            ->join('payment_reason', 'payment_reason.id', '=', 'level_income.pay_reason_id')
-            ->select(
-                'level_income.*',
-                'from_users.user_name as from_username',
-                'from_users.name',
-                'to_users.user_name as to_username',
-                'payment_reason.name as reasonname'
-            )
-            ->where('level_income.pay_reason_id', 5) 
-            ->when(auth()->user()->id != 1, function ($query) {
-                $query->where('level_income.to_id', auth()->user()->id);
-            })
-            ->when($from, function ($query) use ($from) {
-                $query->whereDate('level_income.created_at', '>=', $from);
-            })
-            ->when($to, function ($query) use ($to) {
-                $query->whereDate('level_income.created_at', '<=', $to);
-            })
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('level_income.from_id', 'like', "%$search%")
-                    ->orWhere('level_income.to_id', 'like', "%$search%")
-                    ->orWhere('level_income.amount', 'like', "%$search%")
-                    ->orWhere('from_users.name', 'like', "%$search%")
-                    ->orWhere('to_users.name', 'like', "%$search%")
-                    ->orWhere('payment_reason.name', 'like', "%$search%");
-                });
-            })
-            ->orderBy('level_income.id', 'desc')
-            ->get();
-
         $sponserQuery = DB::table('sponser_income')
             ->join('users as from_users', 'from_users.id', '=', 'sponser_income.from_id')
             ->join('users as to_users', 'to_users.id', '=', 'sponser_income.to_id')
@@ -617,7 +491,6 @@ public function updatewallet_sponser(Request $request)
             ->get();
 
         return view('admin.payment.upgrade', [
-            'levelQuery' => $levelQuery,
             'sponserQuery' => $sponserQuery,
             'uplineQuery' => $uplineQuery,
             'globalQuery' => $globalQuery,
@@ -633,38 +506,6 @@ public function updatewallet_sponser(Request $request)
         $to = $request->input('to', date('Y-m-d'));
         $search = $request->input('search', '');
 
-        $levelQuery = DB::table('level_income')
-            ->join('users as from_users', 'from_users.id', '=', 'level_income.from_id')
-            ->join('users as to_users', 'to_users.id', '=', 'level_income.to_id')
-            ->join('payment_reason', 'payment_reason.id', '=', 'level_income.pay_reason_id')
-            ->select(
-                'level_income.*',
-                'from_users.user_name as from_username',
-                'from_users.name as to_username',
-                'payment_reason.name as reasonname'
-            )
-            ->where('level_income.pay_reason_id', 7) 
-            ->when(auth()->user()->id != 1, function ($query) {
-                $query->where('level_income.to_id', auth()->user()->id);
-            })
-            ->when($from, function ($query) use ($from) {
-                $query->whereDate('level_income.created_at', '>=', $from);
-            })
-            ->when($to, function ($query) use ($to) {
-                $query->whereDate('level_income.created_at', '<=', $to);
-            })
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('level_income.from_id', 'like', "%$search%")
-                    ->orWhere('level_income.to_id', 'like', "%$search%")
-                    ->orWhere('level_income.amount', 'like', "%$search%")
-                    ->orWhere('from_users.name', 'like', "%$search%")
-                    ->orWhere('to_users.name', 'like', "%$search%")
-                    ->orWhere('payment_reason.name', 'like', "%$search%");
-                });
-            })
-            ->orderBy('level_income.id', 'desc')
-            ->get();
 
             $globalQuery = DB::table('global_regain')
             ->join('users as from_users', 'from_users.id', '=', 'global_regain.from_id')
@@ -733,7 +574,6 @@ public function updatewallet_sponser(Request $request)
             ->get();
 
         return view('admin.payment.travel_allowance', [
-            'levelQuery' => $levelQuery,
             'globalQuery' => $globalQuery,
             'uplineQuery' => $uplineQuery,
             'from' => $from,
@@ -747,39 +587,6 @@ public function updatewallet_sponser(Request $request)
         $from = $request->input('from', date('Y-m-01'));
         $to = $request->input('to', date('Y-m-d'));
         $search = $request->input('search', '');
-
-        $levelQuery = DB::table('level_income')
-            ->join('users as from_users', 'from_users.id', '=', 'level_income.from_id')
-            ->join('users as to_users', 'to_users.id', '=', 'level_income.to_id')
-            ->join('payment_reason', 'payment_reason.id', '=', 'level_income.pay_reason_id')
-            ->select(
-                'level_income.*',
-                'from_users.user_name as from_username',
-                'from_users.name as to_username',
-                'payment_reason.name as reasonname'
-            )
-            ->where('level_income.pay_reason_id', 6) 
-            ->when(auth()->user()->id != 1, function ($query) {
-                $query->where('level_income.to_id', auth()->user()->id);
-            })
-            ->when($from, function ($query) use ($from) {
-                $query->whereDate('level_income.created_at', '>=', $from);
-            })
-            ->when($to, function ($query) use ($to) {
-                $query->whereDate('level_income.created_at', '<=', $to);
-            })
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('level_income.from_id', 'like', "%$search%")
-                    ->orWhere('level_income.to_id', 'like', "%$search%")
-                    ->orWhere('level_income.amount', 'like', "%$search%")
-                    ->orWhere('from_users.name', 'like', "%$search%")
-                    ->orWhere('to_users.name', 'like', "%$search%")
-                    ->orWhere('payment_reason.name', 'like', "%$search%");
-                });
-            })
-            ->orderBy('level_income.id', 'desc')
-            ->get();
 
         $globalQuery = DB::table('global_regain')
             ->join('users as from_users', 'from_users.id', '=', 'global_regain.from_id')
@@ -848,7 +655,6 @@ public function updatewallet_sponser(Request $request)
             ->get();
 
         return view('admin.payment.travel_amount', [
-            'levelQuery' => $levelQuery,
             'globalQuery' => $globalQuery,
             'uplineQuery' => $uplineQuery,
             'from' => $from,

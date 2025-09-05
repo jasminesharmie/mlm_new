@@ -128,7 +128,6 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-
                             <a href="{{ url('admin/users') }}"
                                 class="nav-link {{ request()->is('users') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
@@ -180,6 +179,13 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('profile') }}"
+                                class="nav-link {{ request()->is('profile') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Profile</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ url('changepassword') }}"
                                 class="nav-link {{ request()->is('changepassword') ? 'active' : '' }}">

@@ -1,5 +1,6 @@
-@extends('admin.layouts.app')
+
 @section('admin/content')
+
 @php
 $date = $from ?? date('Y-m-01');
 $to = $to ?? date('Y-m-d');
@@ -17,11 +18,13 @@ $to = $to ?? date('Y-m-d');
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered">
+
                         <thead class="thead-dark">
                             <tr>
                                 <th>LEVEL NO</th>
                                 @foreach ($plans as $planlt)
                                 <th>{{ $planlt->plan_name }}</th>
+
                                 @endforeach
                             </tr>
                         </thead>
@@ -29,6 +32,7 @@ $to = $to ?? date('Y-m-d');
                             @foreach ($plans as $planli)
                             <tr>
                                 <td>Level {{ $planli->id }}</td>
+
                                 @foreach ($plans as $planCheck)
                                 @php
                                 $ftIncome = DB::table('upline_income')
@@ -113,6 +117,7 @@ $to = $to ?? date('Y-m-d');
                                 @endforeach
                             </tr>
                             @endforeach
+
                         </tbody>
                     </table>
                 </div>
@@ -120,5 +125,6 @@ $to = $to ?? date('Y-m-d');
         </div>
     </div>
 </div>
+
 
 @endsection

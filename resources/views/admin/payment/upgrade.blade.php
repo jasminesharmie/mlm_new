@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+
 @section('admin/content')
 <section class="content-header">
     <div class="container-fluid d-flex justify-content-between align-items-center">
@@ -195,3 +195,4 @@ $(function() {
 });
 </script>
 @endpush
+

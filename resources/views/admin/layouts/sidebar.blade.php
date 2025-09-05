@@ -38,8 +38,7 @@
                         </li>
                     </ul>
                 </li>
-                <li
-                    class="nav-item has-treeview">
+                <li class="nav-item has-treeview">
                     <a href="" class="nav-link">
                         <i class="nav-icon fas fa-coins"></i>
                         <p> Incomes
@@ -74,12 +73,42 @@
 
                     </ul>
                 </li>
-                    <li class="nav-item">
-                            <a href="{{ url('admin/wallet') }}" class="nav-link">
+                <li class="nav-item">
+                    <a href="{{ url('admin/wallet') }}" class="nav-link">
+                        <i class="fas fa-wallet nav-icon"></i>
+                        <p>Wallet</p>
+                    </a>
+                </li>
+
+
+                <li
+                    class="nav-item has-treeview {{ request()->is('admin/withdrawal*') || request()->is('viewsalary*') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->is('admin/withdrawal*') || request()->is('viewsalary*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-hand-holding-usd"></i>
+                        <p>
+                            Withdrawal
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ url('admin/withdrawal/1') }}"
+                                class="nav-link {{ request()->is('admin/withdrawal/1') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Wallet</p>
+                                <p>Pending</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ url('admin/withdrawal/2') }}"
+                                class="nav-link {{ request()->is('admin/withdrawal/2') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Completed</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
 
                 <li
                     class="nav-item has-treeview {{ request()->segment(1) == 'plans' || request()->is('backup') || request()->segment(1) == 'viewsalary' ? 'menu-open' : '' }}">

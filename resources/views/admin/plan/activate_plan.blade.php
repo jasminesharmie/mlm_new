@@ -56,90 +56,43 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-{{-- Trust Wallet Launch Helper --}}
 <script>
-const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-const isAndroid = /Android/.test(navigator.userAgent);
-
-function openInTrustWallet(targetUrl) {
-    const fullUrl = targetUrl.startsWith('http') ?
-        targetUrl :
-        (window.location.origin.replace(/\/$/, '') + '/' + targetUrl.replace(/^\//, ''));
-
-    if (isMobile) {
-        if (isIOS) {
-            // Universal link first
-            window.location.href =
-            `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(fullUrl)}`;
-            // Fallback app scheme
-            setTimeout(() => {
-                window.location.href = `trust://open_url?coin_id=60&url=${encodeURIComponent(fullUrl)}`;
-            }, 800);
-        } else if (isAndroid) {
-            // Android intent
-            const intent =
-                `intent://open_url?coin_id=60&url=${encodeURIComponent(fullUrl)}#Intent;scheme=trust;package=com.wallet.crypto.trustapp;end`;
-            window.location.href = intent;
-            // Fallback universal link
-            setTimeout(() => {
-                window.location.href =
-                    `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(fullUrl)}`;
-            }, 800);
-        } else {
-            window.location.href =
-            `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(fullUrl)}`;
-        }
-
-        // Helper message if still on page
-        setTimeout(() => {
-            if (!document.hidden) {
-                alert("If Trust Wallet didn't open:\n1) Open Trust Wallet app\n2) Browser tab\n3) Paste this URL:\n" +
-                    fullUrl);
-            }
-        }, 2500);
-    } else {
-        // Desktop → just navigate (extension or WalletConnect handled on the next page)
-        window.location.href = fullUrl;
-    }
-}
-
-document.addEventListener("click", function(e) {
-    const link = e.target.closest(".activate-plan");
-    if (!link) return;
+$(document).on("click", ".activate-plan", function(e) {
     e.preventDefault();
 
-    const planid = link.dataset.planid;
-    const userid = link.dataset.userid;
+    const planId = $(this).data("planid");
+    const amount = parseFloat($(this).data("amount"));
+    const userId = $(this).data("userid");
+    const upgrade = parseFloat($(this).data("upgradeamount"));
 
-    // Visual loading tag
-    link.style.opacity = '0.7';
-    link.style.pointerEvents = 'none';
-    const tag = document.createElement('div');
-    tag.textContent = 'Opening Trust Wallet...';
-    Object.assign(tag.style, {
-        position: 'absolute',
-        top: '10px',
-        right: '10px',
-        background: 'rgba(0,0,0,0.7)',
-        color: '#fff',
-        padding: '2px 6px',
-        borderRadius: '4px',
-        fontSize: '10px'
+    // ✅ If upgrade amount matches plan amount → show confirmation
+
+    $.ajax({
+        url: "{{ url('admin/activate_plan_payment') }}",
+        type: "POST",
+        data: {
+            plan_id: planId,
+            amount: amount,
+            user_id: userId,
+            upgrade: upgrade,
+            upgrade_status: 0,
+            _token: $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(data) {
+            if (data.success) {
+                alert("Plan Activated successfully!");
+                window.location.reload();
+            } else {
+                alert("Error saving plan");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+            alert("An error occurred while saving the plan.");
+        }
     });
-    link.style.position = 'relative';
-    link.appendChild(tag);
 
-    // Route to the dedicated payment page
-    const target =
-    `{{ url('admin/plan_payment') }}/${encodeURIComponent(planid)}/${encodeURIComponent(userid)}`;
-    openInTrustWallet(target);
-
-    setTimeout(() => {
-        link.style.opacity = '1';
-        link.style.pointerEvents = 'auto';
-        tag.remove();
-    }, 3000);
 });
 </script>
+
 @endsection

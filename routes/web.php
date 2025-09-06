@@ -27,8 +27,9 @@ Route::get('/blog', [App\Http\Controllers\MainController::class, 'blog'])->name(
 Route::get('login', [App\Http\Controllers\Auth\LoginController::class, 'userlogin'])->name('login');
 Route::get('userlogin', [App\Http\Controllers\Auth\LoginController::class, 'userlogin'])->name('userlogin');
 Route::get('register', [App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register');
-// Route::get('register/{id}', [App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::get('register/{referral}', [App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register.referral');
 Route::post('newregister', [App\Http\Controllers\Auth\RegisterController::class, 'adminregister'])->name('newregister');
+
 
 //admin
 
@@ -119,4 +120,3 @@ Route::post('admin/transaction_history', [App\Http\Controllers\Admin\PlanControl
 
 
 Route::get('logout', [App\Http\Controllers\Admin\UsersController::class, 'logout'])->name('logout');
-

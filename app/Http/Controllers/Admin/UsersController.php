@@ -130,10 +130,7 @@ class UsersController extends Controller
 
     public function users() {
 	
-		$users = DB::table( 'users' )
-		->Join( 'user_type', 'user_type.id', '=', 'users.user_type_id' )
-		->where( 'users.user_type_id', '2' )
-		->orderBy( 'users.id', 'Asc' )->get();
+		$users = DB::table( 'users' )->get();
 
         $user_type_id = DB::table( 'user_type' )->orderBy( 'id', 'Asc' )->get();
         return view( 'admin/users/index', compact( 'users','user_type_id') );

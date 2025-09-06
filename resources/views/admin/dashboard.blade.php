@@ -28,7 +28,7 @@
                     <div class="card-body p-1">
                         <div class="text-center">
                             <div class="plan-name">{{ Str::limit($plan->plan_name, 8) }}</div>
-                            <div class="plan-amount">${{ $plan->plan_amount }}</div>
+                            <div class="plan-amount">{{ $plan->plan_amount }}</div>
                         </div>
                     </div>
                 </div>
@@ -84,8 +84,8 @@
                         <span class="info-box-icon bg-warning"><i class="fas fa-wallet"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Wallet</span>
-                            <span class="info-box-number">{{ Auth::user()->wallet }} $</span>
-                            <small>{{ $LastWeekwalletIncome }} $ from last week</small>
+                            <span class="info-box-number">{{ Auth::user()->wallet }} </span>
+                            <small>{{ $LastWeekwalletIncome }}  from last week</small>
                         </div>
                     </div>
                 </a>
@@ -97,8 +97,8 @@
                         <span class="info-box-icon bg-info"><i class="fas fa-dollar-sign"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Sponsor Income (50%)</span>
-                            <span class="info-box-number">{{ $sponserIncome }} $</span>
-                            <small>{{ $LastWeeksponserIncome }} $ from last week</small>
+                            <span class="info-box-number">{{ $sponserIncome }} </span>
+                            <small>{{ $LastWeeksponserIncome }}  from last week</small>
                         </div>
                     </div>
                 </a>
@@ -110,7 +110,7 @@
                         <span class="info-box-icon bg-secondary"><i class="fas fa-level-up-alt"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Total Upgrade Package</span>
-                            <span class="info-box-number">{{ Auth::user()->upgrade ?? 0 }} $</span>
+                            <span class="info-box-number">{{ Auth::user()->upgrade ?? 0 }} </span>
                             <small>Upgrade Amount</small>
                         </div>
                     </div>
@@ -123,7 +123,7 @@
                         <span class="info-box-icon bg-primary"><i class="fas fa-sync-alt"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Total Global Rebirth</span>
-                            <span class="info-box-number">{{ $rebirthIncome }} $</span>
+                            <span class="info-box-number">{{ $rebirthIncome }} </span>
                             <small>{{ $LastWeekrebirthIncome }} Global Regain User</small>
                         </div>
                     </div>
@@ -136,8 +136,8 @@
                         <span class="info-box-icon bg-success"><i class="fas fa-sitemap"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Total 7 Upline Sponsor Income</span>
-                            <span class="info-box-number">{{ $uplineIncome }} $</span>
-                            <small>{{ $LastWeekInuplineIncome }} $ from last week</small>
+                            <span class="info-box-number">{{ $uplineIncome }} </span>
+                            <small>{{ $LastWeekInuplineIncome }}  from last week</small>
                         </div>
                     </div>
                 </a>
@@ -149,7 +149,7 @@
                         <span class="info-box-icon bg-danger"><i class="fas fa-hand-holding-usd"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Withdrawal Request</span>
-                            <span class="info-box-number">{{ $Withdrawal }} $</span>
+                            <span class="info-box-number">{{ $Withdrawal }} </span>
                             <small>{{ $LastWeekWithdrawal }} from last week</small>
                         </div>
                     </div>
@@ -163,7 +163,7 @@
                         <span class="info-box-icon bg-dark"><i class="fas fa-user-shield"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Total Admin Amount</span>
-                            <span class="info-box-number">{{ $totalAdminAmount }} $</span>
+                            <span class="info-box-number">{{ $totalAdminAmount }} </span>
                         </div>
                     </div>
                 </a>

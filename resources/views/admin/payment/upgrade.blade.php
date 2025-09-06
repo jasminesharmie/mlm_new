@@ -190,7 +190,6 @@
 <script>
 $(function() {
     $('#table-sponsor').DataTable();
-    $('#table-level').DataTable();
     $('#table-upline').DataTable();
     $('#table-global').DataTable();
 });

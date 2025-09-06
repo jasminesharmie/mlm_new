@@ -56,9 +56,9 @@
     @yield('admin/content')
   </section>
 </div>
-
+<br>
 <footer class="main-footer">
-  <strong><a target="_blank" href="https://galaxytechnologypark.com/">Galaxy Technology Park Inc</a></strong> 2024 &copy; All rights reserved.
+  <strong><a target="_blank" href="https://galaxytechnologypark.com/">Galaxy Technology Park Inc</a></strong> 2025 &copy; All rights reserved.
 </footer>
 </div>
 

@@ -6,96 +6,97 @@
     <div class="sidebar">
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item has-treeview {{ request()->segment(1) == 'dashboard' ? 'menu-open' : '' }}">
+
+                <li class="nav-item">
                     <a href="{{ url('admin/dashboard') }}"
-                        class="nav-link {{ request()->segment(2) == 'dashboard' ? 'active' : '' }}">
+                        class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
 
-                <li
-                    class="nav-item has-treeview {{ request()->segment(1) == 'Active' || request()->is('Inactive') ? 'menu-open' : '' }}">
-                    <a href="" class="nav-link">
+                <li class="nav-item has-treeview {{ request()->is('admin/members*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ request()->is('admin/members*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users"></i>
-                        <p> Members
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
+                        <p>Members <i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ url('admin/members') }}/1"
-                                class="nav-link {{ request()->is('plans') ? 'active' : '' }}">
+                            <a href="{{ url('admin/members/1') }}"
+                                class="nav-link {{ request()->is('admin/members/1') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Active</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('admin/members') }}/2" class="nav-link ">
+                            <a href="{{ url('admin/members/2') }}"
+                                class="nav-link {{ request()->is('admin/members/2') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Inactive</p>
                             </a>
                         </li>
                     </ul>
                 </li>
+
                 <li class="nav-item">
-                    <a href="{{ route('user_activate_plan') }}" class="nav-link">
+                    <a href="{{ route('user_activate_plan') }}"
+                        class="nav-link {{ request()->is('admin/user_activate_plan') ? 'active' : '' }}">
                         <i class="fas fa-trophy nav-icon"></i>
                         <p>Plans</p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview">
-                    <a href="" class="nav-link">
+
+                <li
+                    class="nav-item has-treeview {{ request()->is('admin/spornser') || request()->is('admin/global_rebirth') || request()->is('admin/upline_spornser') || request()->is('admin/upgrade') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->is('admin/spornser') || request()->is('admin/global_rebirth') || request()->is('admin/upline_spornser') || request()->is('admin/upgrade') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-coins"></i>
-                        <p> Incomes
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
+                        <p>Incomes <i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ url('admin/spornser') }}" class="nav-link">
+                            <a href="{{ url('admin/spornser') }}"
+                                class="nav-link {{ request()->is('admin/spornser') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Sponsor</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('admin/global_rebirth') }}" class="nav-link">
+                            <a href="{{ url('admin/global_rebirth') }}"
+                                class="nav-link {{ request()->is('admin/global_rebirth') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Global Rebirth</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('admin/upline_spornser') }}" class="nav-link">
+                            <a href="{{ url('admin/upline_spornser') }}"
+                                class="nav-link {{ request()->is('admin/upline_spornser') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Upline Sponsor</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('admin/upgrade') }}" class="nav-link">
+                            <a href="{{ url('admin/upgrade') }}"
+                                class="nav-link {{ request()->is('admin/upgrade') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Upgrade</p>
                             </a>
                         </li>
-
                     </ul>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ url('admin/wallet') }}" class="nav-link">
+                    <a href="{{ url('admin/wallet') }}"
+                        class="nav-link {{ request()->is('admin/wallet') ? 'active' : '' }}">
                         <i class="fas fa-wallet nav-icon"></i>
                         <p>Wallet</p>
                     </a>
                 </li>
 
-                <li
-                    class="nav-item has-treeview {{ request()->is('admin/withdrawal*') || request()->is('viewsalary*') ? 'menu-open' : '' }}">
-                    <a href="#"
-                        class="nav-link {{ request()->is('admin/withdrawal*') || request()->is('viewsalary*') ? 'active' : '' }}">
+                <li class="nav-item has-treeview {{ request()->is('admin/withdrawal*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ request()->is('admin/withdrawal*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-hand-holding-usd"></i>
-                        <p>
-                            Withdrawal
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
+                        <p>Withdrawal <i class="right fas fa-angle-left"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
@@ -115,42 +116,38 @@
                     </ul>
                 </li>
 
-
                 @if(auth()->user()->user_type_id == 1)
                 <li
-                    class="nav-item has-treeview {{ request()->segment(1) == 'users' || request()->is('usertype') ? 'menu-open' : '' }}">
-                    <a href="" class="nav-link">
+                    class="nav-item has-treeview {{ request()->is('admin/users*') || request()->is('admin/user_type*') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->is('admin/users*') || request()->is('admin/user_type*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user"></i>
-                        <p> Users
-                            <i class="fas fa-angle-left right"></i>
-
-                        </p>
+                        <p>Users <i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ url('admin/users') }}"
-                                class="nav-link {{ request()->is('users') ? 'active' : '' }}">
+                                class="nav-link {{ request()->is('admin/users') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Users</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('admin/user_type') }}" class="nav-link ">
+                            <a href="{{ url('admin/user_type') }}"
+                                class="nav-link {{ request()->is('admin/user_type') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>User Type</p>
-
                             </a>
                         </li>
                     </ul>
                 </li>
 
                 <li
-                    class="nav-item has-treeview {{ request()->segment(1) == 'plans' || request()->is('backup') || request()->segment(1) == 'viewsalary' ? 'menu-open' : '' }}">
-                    <a href="" class="nav-link">
+                    class="nav-item has-treeview {{ request()->is('plans') || request()->is('backup') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->is('plans') || request()->is('backup') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-cog"></i>
-                        <p> Settings
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
+                        <p>Settings <i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
@@ -161,7 +158,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('backup') }}" class="nav-link ">
+                            <a href="{{ route('backup') }}"
+                                class="nav-link {{ request()->is('backup') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Backup</p>
                             </a>
@@ -169,38 +167,38 @@
                     </ul>
                 </li>
                 @endif
+
                 <li
-                    class="nav-item has-treeview {{ request()->segment(1) == 'profile' || request()->is('changepassword') || request()->segment(1) == 'viewsalary' ? 'menu-open' : '' }}">
-                    <a href="" class="nav-link">
+                    class="nav-item has-treeview {{ request()->is('admin/profile') || request()->is('admin/changepassword') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->is('admin/profile') || request()->is('admin/changepassword') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user"></i>
-                        <p>
-                            {{ Auth::user()->name }}
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
+                        <p>{{ Auth::user()->name }} <i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ route('profile') }}"
-                                class="nav-link {{ request()->is('profile') ? 'active' : '' }}">
+                                class="nav-link {{ request()->is('admin/profile') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Profile</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('changepassword') }}"
-                                class="nav-link {{ request()->is('changepassword') ? 'active' : '' }}">
+                            <a href="{{ url('admin/changepassword') }}"
+                                class="nav-link {{ request()->is('admin/changepassword') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Change Password</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('admin/logout') }}" class="nav-link ">
+                            <a href="{{ url('admin/logout') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Logout</p>
                             </a>
                         </li>
                     </ul>
                 </li>
+
             </ul>
         </nav>
     </div>

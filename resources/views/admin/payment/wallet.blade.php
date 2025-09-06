@@ -44,7 +44,7 @@
                             <tbody>
                                 
                                 <tr>
-                                    <td>2</td>
+                                    <td>1</td>
                                     <td>Sponsor Income</td>
                                     <td>{{ date('d-m-Y') }}</td>
                                     <td>{{ $sponserIncome }} </td>
@@ -55,7 +55,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>3</td>
+                                    <td>2</td>
                                     <td>Withdrawal Available Amount</td>
                                     <td>{{ date('d-m-Y') }}</td>
                                     <td>{{ Auth::user()->wallet }} </td>

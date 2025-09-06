@@ -93,7 +93,7 @@
                 </div>
             </form>
 
-            <a href="{{ route('login') }}" class="text-center">I already have a 22membership</a>
+            <a href="{{ route('login') }}" class="text-center">I already have a membership</a>
         </div>
         <!-- /.form-box -->
     </div><!-- /.card -->

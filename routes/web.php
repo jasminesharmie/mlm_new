@@ -27,7 +27,7 @@ Route::get('/blog', [App\Http\Controllers\MainController::class, 'blog'])->name(
 Route::get('login', [App\Http\Controllers\Auth\LoginController::class, 'userlogin'])->name('login');
 Route::get('userlogin', [App\Http\Controllers\Auth\LoginController::class, 'userlogin'])->name('userlogin');
 Route::get('register', [App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::get('register/{id}', [App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register');
+// Route::get('register/{id}', [App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('newregister', [App\Http\Controllers\Auth\RegisterController::class, 'adminregister'])->name('newregister');
 
 //admin

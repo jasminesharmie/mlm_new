@@ -37,7 +37,7 @@ class MainController extends BaseController
 
         public function welcome(){
 			
-            return view("admin/login");
+            return view("admin/auth/login");
 
         }
 

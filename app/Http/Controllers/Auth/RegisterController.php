@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
-    public function showRegistrationForm($referral = null)
+    public function showRegistrationForm()
     {
         
-        return view('admin.register', ['referral_id' => $referral]);
+        return view('admin.auth.register' );
     }
 
     public function adminregister(Request $request)

@@ -30,6 +30,7 @@
                 <form method="post" action="{{ url('/login') }}">
                     {{ csrf_field() }}
                     <input type="hidden" name="device_token" id="device_token">
+
                     <div class="input-group mb-3">
                         <input type="text" name="user_name" placeholder="User Name" class="form-control">
                         <div class="input-group-append">
@@ -49,6 +50,7 @@
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
                     </div>
+
                     <div class="row">
                         <div class="col-8">
                             <div class="icheck-primary">
@@ -62,9 +64,14 @@
                         <div class="col-4">
                             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                         </div>
+                    </div>
 
+                    <!-- Register button centered below -->
+                    <div class="text-center mt-3">
+                        <a href="{{ url('register') }}" class="btn btn-primary px-4">New Register</a>
                     </div>
                 </form>
+
 
             </div>
 

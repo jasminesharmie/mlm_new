@@ -372,3 +372,8 @@ CREATE TABLE `wallet` (
   `created_at` varchar(35) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+
+
+//////mlm /////////
+
+ALTER TABLE `users` ADD `id` INT(30) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);

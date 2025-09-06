@@ -96,12 +96,6 @@ class DashboardController extends Controller
         ->count();
 
         
-        $levelIncome = DB::table('level_income')->where('to_id', auth()->user()->id)->where('pay_reason_id', '3')->sum('amount');
-        $LastWeekInlevelIncome = DB::table('level_income')
-        ->where('pay_reason_id', '3')
-        ->where('to_id', auth()->user()->id)
-        ->whereBetween(DB::raw('DATE(created_at)'), [$weekStart, $weekEnd])
-        ->sum('amount');
 
         $uplineIncome = DB::table('upline_income')->where('to_id', auth()->user()->id)->where('pay_reason_id', '4')->sum('amount');
         $LastWeekInuplineIncome = DB::table('upline_income')
@@ -147,11 +141,6 @@ class DashboardController extends Controller
         $GRAdmin = DB::table('global_regain')->where('pay_reason_id', 8)->where('from_id', auth()->user()->id)->sum('amount');
         $GRTotal = $GRTravel + $GRTravelAllo + $GRUpgrade + $GRAdmin;
 
-        $LITravel = DB::table('level_income')->where('pay_reason_id', 6)->where('to_id', auth()->user()->id)->sum('amount');
-        $LITravelAllo = DB::table('level_income')->where('pay_reason_id', 7)->where('to_id', auth()->user()->id)->sum('amount');
-        $LIUpgrade = DB::table('level_income')->where('pay_reason_id', 5)->where('to_id', auth()->user()->id)->sum('amount');
-        $LIAdmin = DB::table('level_income')->where('pay_reason_id', 8)->where('to_id', auth()->user()->id)->sum('amount');
-        $LITotal = $LITravel + $LITravelAllo + $LIUpgrade + $LIAdmin;
 
         $UPTravel = DB::table('upline_income')->where('pay_reason_id', 6)->where('to_id', auth()->user()->id)->sum('amount');
         $UPTravelAllo = DB::table('upline_income')->where('pay_reason_id', 7)->where('to_id', auth()->user()->id)->sum('amount');
@@ -173,10 +162,6 @@ class DashboardController extends Controller
             }
         }
 
-        $levelQuery = DB::table('level_income')
-        ->where('pay_reason_id', 8) 
-        ->where('to_id', 1)
-        ->sum('amount');
 
         $sponserQuery = DB::table('sponser_income')
         ->where('pay_reason_id', 8) 
@@ -193,9 +178,9 @@ class DashboardController extends Controller
         ->where('to_id', 1)
         ->sum('amount');
 
-        $totalAdminAmount =  $levelQuery + $sponserQuery + $uplineQuery + $globalQuery;
+        $totalAdminAmount = $sponserQuery + $uplineQuery + $globalQuery;
 
-        return view('admin.dashboard', compact('total_coin', 'coinDetails','ActiveMembers', 'InactiveMembers', 'LastWeekActiveMembers', 'LastWeekInactiveMembers', 'nextPlanName', 'remainingPlansCount', 'levelIncome', 'LastWeekInlevelIncome', 'uplineIncome', 'LastWeekInuplineIncome', 'LastWeekwalletIncome', 'sponserIncome', 'LastWeeksponserIncome','rebirthIncome','LastWeekrebirthIncome','Withdrawal','LastWeekWithdrawal','GRTravel','GRTravelAllo','GRUpgrade','GRAdmin','GRTotal','LITravel','LITravelAllo','LIUpgrade','LIAdmin','LITotal','UPTravel','UPTravelAllo','UPUpgrade','UPAdmin','UPTotal','plans','userPlans','nextPlanId', 'totalAdminAmount'));
+        return view('admin.dashboard', compact('total_coin', 'coinDetails','ActiveMembers', 'InactiveMembers', 'LastWeekActiveMembers', 'LastWeekInactiveMembers', 'nextPlanName', 'remainingPlansCount', 'uplineIncome', 'LastWeekInuplineIncome', 'LastWeekwalletIncome', 'sponserIncome', 'LastWeeksponserIncome','rebirthIncome','LastWeekrebirthIncome','Withdrawal','LastWeekWithdrawal','GRTravel','GRTravelAllo','GRUpgrade','GRAdmin','GRTotal','UPTravel','UPTravelAllo','UPUpgrade','UPAdmin','UPTotal','plans','userPlans','nextPlanId', 'totalAdminAmount'));
     }
 	
 

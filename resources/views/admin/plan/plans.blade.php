@@ -89,10 +89,10 @@
 
                                                     <div class="form-group mb-3">
                                                         <label for="plan_amount_add" class="form-label"><span
-                                                                style="color:red">*</span> Plan Amount ($)</label>
+                                                                style="color:red">*</span> Plan Amount </label>
                                                         <input required type="number" class="form-control"
                                                             name="plan_amount" id="plan_amount_add"
-                                                            placeholder="Plan Amount $">
+                                                            placeholder="Plan Amount">
                                                     </div>
 
                                                     <div class="form-group mb-3">
@@ -162,10 +162,10 @@
 
                                                     <div class="form-group mb-3">
                                                         <label for="plan_amount_edit" class="form-label"><span
-                                                                style="color:red">*</span> Plan Amount ($)</label>
+                                                                style="color:red">*</span> Plan Amount </label>
                                                         <input required type="number" class="form-control"
                                                             name="plan_amount" id="plan_amount_edit"
-                                                            placeholder="Plan Amount $">
+                                                            placeholder="Plan Amount">
                                                     </div>
 
                                                     <div class="form-group mb-3">

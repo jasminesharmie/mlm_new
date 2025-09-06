@@ -47,7 +47,7 @@
                                     <td>2</td>
                                     <td>Sponsor Income</td>
                                     <td>{{ date('d-m-Y') }}</td>
-                                    <td>{{ $sponserIncome }} $</td>
+                                    <td>{{ $sponserIncome }} </td>
                                     <td>
                                         <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#paymentModal1">
                                             <i class="fa fa-arrow-right"></i> Move to Wallet
@@ -58,7 +58,7 @@
                                     <td>3</td>
                                     <td>Withdrawal Available Amount</td>
                                     <td>{{ date('d-m-Y') }}</td>
-                                    <td>{{ Auth::user()->wallet }} $</td>
+                                    <td>{{ Auth::user()->wallet }} </td>
                                     <td>
                                         <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#addwithdrawal">
                                             <i class="fa fa-wallet"></i> Withdraw
@@ -86,7 +86,7 @@
                             <div class="modal-body text-center">
                                 <input type="hidden" name="user_id" value="{{ Auth::id() }}">
                                 <input type="hidden" name="amount" value="{{ $sponserIncome }}">
-                                <p>Are you sure you want to transfer <b>{{ $sponserIncome }} $</b> to your wallet?</p>
+                                <p>Are you sure you want to transfer <b>{{ $sponserIncome }} </b> to your wallet?</p>
                             </div>
                             <div class="modal-footer justify-content-between">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

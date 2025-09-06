@@ -41,7 +41,7 @@
                                 <div class="d-flex align-items-center">
                                     <div>
                                         <p class="mb-0">{{ $plan->plan_name }}</p>
-                                        <h4 class="my-1">{{ $plan->plan_amount }} $</h4>
+                                        <h4 class="my-1">{{ $plan->plan_amount }} </h4>
                                         <p class="mb-0 font-13">{{ $statusText }}</p>
                                     </div>
                                     <div class="widgets-icons bg-light-transparent ms-auto">

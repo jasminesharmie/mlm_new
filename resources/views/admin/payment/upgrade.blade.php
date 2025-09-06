@@ -44,8 +44,8 @@
                                         <th>#</th>
                                         <th>From</th>
                                         <th>From Name</th>
-                                        <th>Income ($)</th>
-                                        <th>Package Amount ($)</th>
+                                        <th>Income </th>
+                                        <th>Package Amount </th>
                                         <th>Reason</th>
                                         <th>Date</th>
                                     </tr>
@@ -59,8 +59,8 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $spornser->from_username }}</td>
                                         <td>{{ $spornser->name }}</td>
-                                        <td>{{ $spornser->amount }} $</td>
-                                        <td>{{ $plan->plan_amount ?? '-' }} $</td>
+                                        <td>{{ $spornser->amount }} </td>
+                                        <td>{{ $plan->plan_amount ?? '-' }} </td>
                                         <td>{{ $spornser->reasonname }}</td>
                                         <td>{{ \Carbon\Carbon::parse($spornser->created_at)->format('d-m-Y H:i') }}</td>
                                     </tr>
@@ -74,8 +74,8 @@
                                     ->sum('amount');
                                     @endphp
                                     <tr>
-                                        <td colspan="3" class="text-right"><strong>Total Income ($)</strong></td>
-                                        <td><strong>{{ $sumamount }} $</strong></td>
+                                        <td colspan="3" class="text-right"><strong>Total Income </strong></td>
+                                        <td><strong>{{ $sumamount }} </strong></td>
                                         <td colspan="3"></td>
                                     </tr>
                                 </tfoot>
@@ -92,8 +92,8 @@
                                         <th>#</th>
                                         <th>From</th>
                                         <th>From Name</th>
-                                        <th>Income ($)</th>
-                                        <th>Package Amount ($)</th>
+                                        <th>Income </th>
+                                        <th>Package Amount </th>
                                         <th>Reason</th>
                                         <th>Date</th>
                                     </tr>
@@ -107,8 +107,8 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $upline->from_username }}</td>
                                         <td>{{ $upline->name }}</td>
-                                        <td>{{ $upline->amount }} $</td>
-                                        <td>{{ $plan->plan_amount ?? '-' }} $</td>
+                                        <td>{{ $upline->amount }} </td>
+                                        <td>{{ $plan->plan_amount ?? '-' }} </td>
                                         <td>{{ $upline->reasonname }}</td>
                                         <td>{{ \Carbon\Carbon::parse($upline->created_at)->format('d-m-Y H:i') }}</td>
                                     </tr>
@@ -122,8 +122,8 @@
                                     ->sum('amount');
                                     @endphp
                                     <tr>
-                                        <td colspan="3" class="text-right"><strong>Total Income ($)</strong></td>
-                                        <td><strong>{{ $sumuplineamount }} $</strong></td>
+                                        <td colspan="3" class="text-right"><strong>Total Income </strong></td>
+                                        <td><strong>{{ $sumuplineamount }} </strong></td>
                                         <td colspan="3"></td>
                                     </tr>
                                 </tfoot>
@@ -139,8 +139,8 @@
                                         <th>#</th>
                                         <th>From</th>
                                         <th>To Username</th>
-                                        <th>Income ($)</th>
-                                        <th>Package Amount ($)</th>
+                                        <th>Income </th>
+                                        <th>Package Amount </th>
                                         <th>Reason</th>
                                         <th>Date</th>
                                     </tr>
@@ -154,8 +154,8 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $global->from_username }}</td>
                                         <td>{{ $global->to_username }}</td>
-                                        <td>{{ $global->amount }} $</td>
-                                        <td>{{ $plan->plan_amount ?? '-' }} $</td>
+                                        <td>{{ $global->amount }} </td>
+                                        <td>{{ $plan->plan_amount ?? '-' }} </td>
                                         <td>{{ $global->reasonname }}</td>
                                         <td>{{ \Carbon\Carbon::parse($global->created_at)->format('d-m-Y H:i') }}</td>
                                     </tr>
@@ -169,8 +169,8 @@
                                     ->sum('amount');
                                     @endphp
                                     <tr>
-                                        <td colspan="3" class="text-right"><strong>Total Income ($)</strong></td>
-                                        <td><strong>{{ $sumrebirthamount }} $</strong></td>
+                                        <td colspan="3" class="text-right"><strong>Total Income </strong></td>
+                                        <td><strong>{{ $sumrebirthamount }} </strong></td>
                                         <td colspan="3"></td>
                                     </tr>
                                 </tfoot>

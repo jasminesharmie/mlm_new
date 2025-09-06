@@ -41,8 +41,8 @@
                                 <th>#</th>
                                 <th>From ID</th>
                                 <th>From Name</th>
-                                <th>Sponsor Amount 50% ($)</th>
-                                <th>Package Amount ($)</th>
+                                <th>Sponsor Amount 50% </th>
+                                <th>Package Amount </th>
                                 <th>Reason</th>
                                 <th>Date</th>
                             </tr>
@@ -53,8 +53,8 @@
                                 <td>{{ ($spornsers->currentPage() - 1) * $spornsers->perPage() + $key + 1 }}</td>
                                 <td>{{ $spornser->from_username }}</td>
                                 <td>{{ $spornser->from_name }}</td>
-                                <td>{{ $spornser->amount }} $</td>
-                                <td>{{ $spornser->plan_amount }} $</td>
+                                <td>{{ $spornser->amount }} </td>
+                                <td>{{ $spornser->plan_amount }} </td>
                                 <td>{{ $spornser->reason_name }}</td>
                                 <td>{{ \Carbon\Carbon::parse($spornser->created_at)->format('d-m-Y H:i') }}</td>
                             </tr>

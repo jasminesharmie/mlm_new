@@ -631,160 +631,224 @@ public function kannanaaaaa() {
       });
   }
   
-    // The reusable core activation logic
     protected function repeatPlanPayment($userId, $amount, $planId, $upgrade)
     {
-
-        $planData = DB::table('plans')->where('id',$planId)->first();
-
-       
+        $planData = DB::table('plans')->where('id', $planId)->first();
+    
         // Get current user details
         $currentUser = DB::table('users')->where('id', $userId)->first();
-
+    
+        if (!$currentUser) {
+            \Log::error("repeatPlanPayment: User not found for user_id {$userId}");
+            return false; // stop execution safely
+        }
+    
+        // fallback referral_id → admin (1) if null
+        $referralId = $currentUser->referral_id ?? 1;
+    
         // //////////////////////  1) Sponser Income //////////////////////////
-
-            $refralupgradeCommission = ($amount * 5) / 100;
-            $referrerCommission = ($amount * 50) / 100;
-            $adminCommission    = ($amount * 5) / 100;
-
-            // Self bonus
-            $this->storeSponserPayment('Rebirth', $planId, $userId, $currentUser->referral_id, 1, '4', $refralupgradeCommission, 1, "Referal Upgrade Bonus - Global Regain",'4');
-
-            //  Referrer bonus
-            if (!empty($currentUser->referral_id)) {
-                $this->storeSponserPayment('RebirthIn', $planId, $userId, $currentUser->referral_id, 1, '1', $referrerCommission, 1, "Referral Sponser Income - Global Regain",'3');
-            } else {
-                $this->storeSponserPayment('RebirthIn', $planId, $userId, 1, 1, '1', $referrerCommission, 1, "Referral Sponser Income (Admin) - Global Regain",'4');
-            }
-
-            // Admin bonus (set to 0 if you want ONLY the rotating 20% path)
-            if ($adminCommission > 0) {
-                $this->storeSponserPayment('Rebirth', $planId, $userId, 1, 1, '5', $adminCommission, 1, "Admin Bonus Upgrade",'4');
-            }
-
-        
-
-       
+        $refralupgradeCommission = ($amount * 5) / 100;
+        $referrerCommission      = ($amount * 50) / 100;
+        $adminCommission         = ($amount * 5) / 100;
+    
+        // Self bonus
+        $this->storeSponserPayment(
+            'Rebirth',
+            $planId,
+            $userId,
+            $referralId,
+            1,
+            '4',
+            $refralupgradeCommission,
+            1,
+            "Referal Upgrade Bonus - Global Regain",
+            '4'
+        );
+    
+        // Referrer bonus
+        if (!empty($currentUser->referral_id)) {
+            $this->storeSponserPayment(
+                'RebirthIn',
+                $planId,
+                $userId,
+                $currentUser->referral_id,
+                1,
+                '1',
+                $referrerCommission,
+                1,
+                "Referral Sponser Income - Global Regain",
+                '3'
+            );
+        } else {
+            $this->storeSponserPayment(
+                'RebirthIn',
+                $planId,
+                $userId,
+                1,
+                1,
+                '1',
+                $referrerCommission,
+                1,
+                "Referral Sponser Income (Admin) - Global Regain",
+                '4'
+            );
+        }
+    
+        // Admin bonus (set to 0 if you want ONLY the rotating 20% path)
+        if ($adminCommission > 0) {
+            $this->storeSponserPayment(
+                'Rebirth',
+                $planId,
+                $userId,
+                1,
+                1,
+                '5',
+                $adminCommission,
+                1,
+                "Admin Bonus Upgrade",
+                '4'
+            );
+        }
+    
         // // /**
         // //  * 4. UPLINE COMMISSION
         // //  */
         $commissionAmount = ($amount * $planData->upline_amount) / 100;
         $uplinerId = $this->getUpline($currentUser, $planId);
-
+    
         if ($uplinerId) {
             $hasPlan = DB::table('user_plan')
                 ->where('user_id', $uplinerId)
                 ->where('plan_id', $planId)
                 ->exists();
-
+    
             if (!$hasPlan) {
                 $uplinerId = 1; // admin fallback
             }
         } else {
             $uplinerId = 1; // admin fallback
         }
-
-       
+    
         // ////////////////////////////////// 2) Global Regain /////////////////////////////////
-        // // . ===== NEW: Rotating 20% commission per plan (Admin -> #1 -> #2 ... per 20 purchases) =====
-            $rotatingPercent = $planData->regain_amount; 
-            $rotatingCommissionAmount = ($amount * $rotatingPercent) / 100;
-
-            $globalregainsssar = DB::table('global_regain')
+        $rotatingPercent = $planData->regain_amount;
+        $rotatingCommissionAmount = ($amount * $rotatingPercent) / 100;
+    
+        $globalregainsssar = DB::table('global_regain')
+            ->where('plan_id', $planId)
+            ->where('status', 0)
+            ->where('pay_reason_id', '2')
+            ->orderby('id', 'ASC')
+            ->first();
+    
+        if ($globalregainsssar) {
+            $globalregain = DB::table('global_regain')
                 ->where('plan_id', $planId)
                 ->where('status', 0)
-                ->where('pay_reason_id','2')
-                ->orderby('id','ASC')
-                ->first();
-
-                $globalregain = DB::table('global_regain')
-                    ->where('plan_id', $planId)
-                    ->where('status', 0)
-                    ->where('from_id', $globalregainsssar->to_id)
-                    ->where('pay_reason_id','2')
-                    ->count();
-
-            $parentId = $globalregainsssar->to_id;
-
-            if($globalregain == 4) {
-
-                $this->storeGlobalPayment('PlanTree',$planId,$parentId,$userId,1,'2',$rotatingCommissionAmount,1,"Global regain Income - Global Regain",'4',0);
-                
-                DB::table('global_regain')->where('plan_id',$planId)->where('to_id',$parentId)->update([
-                    'status'        => 1,
-                ]);
-
-                    $total = ((($amount * 20) / 100) * 5) - $amount;
-
-                  
-                    // Reset beneficiary's global rebirth amount
-                    $GBA = DB::table('users')->where('id', $parentId)->value('global_rebirth_amount');
-                    $newBalance = $GBA - $amount;
-                    DB::table('users')->where('id', $parentId)->update(['global_rebirth_amount' => $newBalance]);
-            
-                    $rebirthData = DB::table('users')->where('id', $parentId)->first();
-            
-                    if ($rebirthData) {
-
-                        $latestId = DB::table('users')->max('id') ?? 0; 
-                        $new = $latestId - 1; 
-                        $newId = $new + 1001; 
-                        $formattedId = str_pad($newId, 4, '0', STR_PAD_LEFT); 
-                        $username = "TFC" . $formattedId;
-
-                        if($planId == 1){
-                            // Create new rebirth user
-                            $newUId = DB::table('users')->insertGetId([
-                                'referral_id' => $parentId,
-                                'user_type_id' => 4,
-                                'plan_id' => $planId,
-                                'user_name' => $username,
-                                'name' => 'Global - Rebirth',
-                                'email' => $rebirthData->email,
-                                'phone' => $rebirthData->phone,
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ]);
-
-                            // Create rebirth plan entry
-                            $rebirthPlan = DB::table('user_plan')->insert([
-                                'user_id' => $newUId,
-                                'plan_id' => $planId,
-                                'amount' => $amount,
-                                'created_by' => auth()->user()->id,
-                                'created_at' => now(),
-                            ]);
-
-                            $this->repeatPlanPayment($newUId, $amount, $planId, $upgrade);
-
-                        } else {
-
-                            $rebirthUser = DB::table('users')->where('referral_id', $parentId)->where('user_type_id', 4)->first();
-
-                            // Create rebirth plan entry
-                            $rebirthPlan = DB::table('user_plan')->insert([
-                                'user_id' => $rebirthUser->id,
-                                'plan_id' => $planId,
-                                'amount' => $amount,
-                                'created_by' => auth()->user()->id,
-                                'created_at' => now(),
-                            ]);
-
-                            $this->repeatPlanPayment($rebirthUser->id, $amount, $planId, $upgrade);
-                        }
-            
+                ->where('from_id', $globalregainsssar->to_id)
+                ->where('pay_reason_id', '2')
+                ->count();
     
-                        $this->repeatPlanPayment($newId, $amount, $planId, $upgrade);
-                    }                      
-                
+            $parentId = $globalregainsssar->to_id;
+    
+            if ($globalregain == 4) {
+                $this->storeGlobalPayment(
+                    'PlanTree',
+                    $planId,
+                    $parentId,
+                    $userId,
+                    1,
+                    '2',
+                    $rotatingCommissionAmount,
+                    1,
+                    "Global regain Income - Global Regain",
+                    '4',
+                    0
+                );
+    
+                DB::table('global_regain')
+                    ->where('plan_id', $planId)
+                    ->where('to_id', $parentId)
+                    ->update(['status' => 1]);
+    
+                $total = ((($amount * 20) / 100) * 5) - $amount;
+    
+                // Reset beneficiary's global rebirth amount
+                $GBA = DB::table('users')->where('id', $parentId)->value('global_rebirth_amount');
+                $newBalance = $GBA - $amount;
+                DB::table('users')->where('id', $parentId)->update(['global_rebirth_amount' => $newBalance]);
+    
+                $rebirthData = DB::table('users')->where('id', $parentId)->first();
+    
+                if ($rebirthData) {
+                    $latestId = DB::table('users')->max('id') ?? 0;
+                    $new = $latestId - 1;
+                    $newId = $new + 1001;
+                    $formattedId = str_pad($newId, 4, '0', STR_PAD_LEFT);
+                    $username = "TFC" . $formattedId;
+    
+                    if ($planId == 1) {
+                        // Create new rebirth user
+                        $newUId = DB::table('users')->insertGetId([
+                            'referral_id' => $parentId,
+                            'user_type_id' => 4,
+                            'plan_id' => $planId,
+                            'user_name' => $username,
+                            'name' => 'Global - Rebirth',
+                            'email' => $rebirthData->email,
+                            'phone' => $rebirthData->phone,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+    
+                        // Create rebirth plan entry
+                        DB::table('user_plan')->insert([
+                            'user_id' => $newUId,
+                            'plan_id' => $planId,
+                            'amount' => $amount,
+                            'created_by' => auth()->user()->id,
+                            'created_at' => now(),
+                        ]);
+    
+                        $this->repeatPlanPayment($newUId, $amount, $planId, $upgrade);
+                    } else {
+                        $rebirthUser = DB::table('users')
+                            ->where('referral_id', $parentId)
+                            ->where('user_type_id', 4)
+                            ->first();
+    
+                        DB::table('user_plan')->insert([
+                            'user_id' => $rebirthUser->id,
+                            'plan_id' => $planId,
+                            'amount' => $amount,
+                            'created_by' => auth()->user()->id,
+                            'created_at' => now(),
+                        ]);
+    
+                        $this->repeatPlanPayment($rebirthUser->id, $amount, $planId, $upgrade);
+                    }
+    
+                    $this->repeatPlanPayment($newId, $amount, $planId, $upgrade);
+                }
             } else {
-                $this->storeGlobalPayment('PlanTree',$planId,$parentId,$userId,1,'2',$rotatingCommissionAmount,1,"Global regain Income",'4',0);
+                $this->storeGlobalPayment(
+                    'PlanTree',
+                    $planId,
+                    $parentId,
+                    $userId,
+                    1,
+                    '2',
+                    $rotatingCommissionAmount,
+                    1,
+                    "Global regain Income",
+                    '4',
+                    0
+                );
             }
-        // // // // ===== END NEW BLOCK =====
-
+        }
+    
         return response()->json(['success' => true]);
-
     }
+    
 
    
 

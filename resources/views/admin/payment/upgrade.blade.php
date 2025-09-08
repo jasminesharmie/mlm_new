@@ -69,7 +69,7 @@
                                 <tfoot>
                                     @php
                                     $sumamount = DB::table('sponser_income')
-                                    ->where('pay_reason_id', 5)
+                                    ->where('pay_reason_id', 4)
                                     ->where('to_id', auth()->user()->id)
                                     ->sum('amount');
                                     @endphp
@@ -117,7 +117,7 @@
                                 <tfoot>
                                     @php
                                     $sumuplineamount = DB::table('upline_income')
-                                    ->where('pay_reason_id', 5)
+                                    ->where('pay_reason_id', 3)
                                     ->where('to_id', auth()->user()->id)
                                     ->sum('amount');
                                     @endphp
@@ -164,7 +164,7 @@
                                 <tfoot>
                                     @php
                                     $sumrebirthamount = DB::table('global_regain')
-                                    ->where('pay_reason_id', 5)
+                                    ->where('pay_reason_id', 4)
                                     ->where('to_id', auth()->user()->id)
                                     ->sum('amount');
                                     @endphp

@@ -22,48 +22,42 @@ class PaymentController extends Controller
   {
     $sponserQuery = DB::table('sponser_income')
         ->join('users as from_users', 'from_users.id', '=', 'sponser_income.from_id')
-        ->join('users as to_users', 'to_users.id', '=', 'sponser_income.to_id')
         ->join('payment_reason', 'payment_reason.id', '=', 'sponser_income.pay_reason_id')
         ->select(
             'sponser_income.*',
             'from_users.user_name as from_username',
             'from_users.name',
-            'to_users.user_name as to_username',
             'payment_reason.name as reasonname'
         )
-        ->where('sponser_income.pay_reason_id', 8) 
+        ->where('sponser_income.pay_reason_id', 5) 
         ->where('sponser_income.to_id', 1)
         ->orderBy('sponser_income.id', 'desc')
         ->get();
 
     $uplineQuery = DB::table('upline_income')
         ->join('users as from_users', 'from_users.id', '=', 'upline_income.from_id')
-        ->join('users as to_users', 'to_users.id', '=', 'upline_income.to_id')
         ->join('payment_reason', 'payment_reason.id', '=', 'upline_income.pay_reason_id')
         ->select(
             'upline_income.*',
             'from_users.user_name as from_username',
             'from_users.name',
-            'to_users.user_name as to_username',
             'payment_reason.name as reasonname'
         )
-        ->where('upline_income.pay_reason_id', 8) 
+        ->where('upline_income.pay_reason_id', 3) 
         ->where('upline_income.to_id', 1)
         ->orderBy('upline_income.id', 'desc')
         ->get();
 
     $globalQuery = DB::table('global_regain')
         ->join('users as from_users', 'from_users.id', '=', 'global_regain.from_id')
-        ->join('users as to_users', 'to_users.id', '=', 'global_regain.to_id')
         ->join('payment_reason', 'payment_reason.id', '=', 'global_regain.pay_reason_id')
         ->select(
             'global_regain.*',
             'from_users.user_name as from_username',
             'from_users.name',
-            'to_users.user_name as to_username',
             'payment_reason.name as reasonname'
         )
-        ->where('global_regain.pay_reason_id', 8) 
+        ->where('global_regain.pay_reason_id', 5) 
         ->where('global_regain.to_id', 1)
         ->orderBy('global_regain.id', 'desc')
         ->get();
@@ -205,14 +199,12 @@ public function getData(Request $request)
     $query = DB::table('upline_income')
         ->join('payment_reason', 'payment_reason.id', '=', 'upline_income.pay_reason_id')
         ->join('users as from_users', 'from_users.id', '=', 'upline_income.from_id')
-        ->join('users as to_users', 'to_users.id', '=', 'upline_income.to_id')
         ->select(
             'upline_income.*',
             'payment_reason.name as reasonname',
             'from_users.user_name as from_username',
-            'to_users.user_name as to_username'
         )
-        ->where('upline_income.pay_reason_id', 4)
+        ->where('upline_income.pay_reason_id', 3)
         ->when($from, function ($q) use ($from) {
             $q->whereDate('upline_income.created_at', '>=', $from);
         })
@@ -383,284 +375,102 @@ public function updatewallet_sponser(Request $request)
 
 
 
-    public function upgrade(Request $request)
-    {
-        $from = $request->input('from', date('Y-m-01'));
-        $to = $request->input('to', date('Y-m-d'));
-        $search = $request->input('search', '');
-        $sponserQuery = DB::table('sponser_income')
-            ->join('users as from_users', 'from_users.id', '=', 'sponser_income.from_id')
-            ->join('users as to_users', 'to_users.id', '=', 'sponser_income.to_id')
-            ->join('payment_reason', 'payment_reason.id', '=', 'sponser_income.pay_reason_id')
-            ->select(
-                'sponser_income.*',
-                'from_users.user_name as from_username',
-                'from_users.name',
-                'to_users.user_name as to_username',
-                'payment_reason.name as reasonname'
-            )
-            ->where('sponser_income.pay_reason_id', 5) 
-            ->when(auth()->user()->id != 1, function ($query) {
-                $query->where('sponser_income.to_id', auth()->user()->id);
-            })
-            ->when($from, function ($query) use ($from) {
-                $query->whereDate('sponser_income.created_at', '>=', $from);
-            })
-            ->when($to, function ($query) use ($to) {
-                $query->whereDate('sponser_income.created_at', '<=', $to);
-            })
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('sponser_income.from_id', 'like', "%$search%")
-                    ->orWhere('sponser_income.to_id', 'like', "%$search%")
-                    ->orWhere('sponser_income.amount', 'like', "%$search%")
-                    ->orWhere('from_users.name', 'like', "%$search%")
-                    ->orWhere('to_users.name', 'like', "%$search%")
-                    ->orWhere('payment_reason.name', 'like', "%$search%");
-                });
-            })
-            ->orderBy('sponser_income.id', 'desc')
-            ->get();
+public function upgrade(Request $request)
+{
+    $from = $request->input('from', date('Y-m-01'));
+    $to = $request->input('to', date('Y-m-d'));
+    $search = $request->input('search', '');
 
-        $uplineQuery = DB::table('upline_income')
-            ->join('users as from_users', 'from_users.id', '=', 'upline_income.from_id')
-            ->join('users as to_users', 'to_users.id', '=', 'upline_income.to_id')
-            ->join('payment_reason', 'payment_reason.id', '=', 'upline_income.pay_reason_id')
-            ->select(
-                'upline_income.*',
-                'from_users.user_name as from_username',
-                'from_users.name',
-                'to_users.user_name as to_username',
-                'payment_reason.name as reasonname'
-            )
-            ->where('upline_income.pay_reason_id', 5) 
-            ->when(auth()->user()->id != 1, function ($query) {
-                $query->where('upline_income.to_id', auth()->user()->id);
-            })
-            ->when($from, function ($query) use ($from) {
-                $query->whereDate('upline_income.created_at', '>=', $from);
-            })
-            ->when($to, function ($query) use ($to) {
-                $query->whereDate('upline_income.created_at', '<=', $to);
-            })
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('upline_income.from_id', 'like', "%$search%")
-                    ->orWhere('upline_income.to_id', 'like', "%$search%")
-                    ->orWhere('upline_income.amount', 'like', "%$search%")
-                    ->orWhere('from_users.name', 'like', "%$search%")
-                    ->orWhere('to_users.name', 'like', "%$search%")
-                    ->orWhere('payment_reason.name', 'like', "%$search%");
-                });
-            })
-            ->orderBy('upline_income.id', 'desc')
-            ->get();
+    
+    $sponserQuery = DB::table('sponser_income')
+        ->leftjoin('users as from_users', 'from_users.id', '=', 'sponser_income.from_id')
+        ->leftjoin('payment_reason', 'payment_reason.id', '=', 'sponser_income.pay_reason_id')
+        ->select(
+            'sponser_income.*',
+            'from_users.user_name as from_username',
+            'from_users.name',
+            'payment_reason.name as reasonname'
+        )
+        ->where('sponser_income.pay_reason_id', 4) 
+        ->when(auth()->user()->id != 1, function ($query) {
+            $query->where('sponser_income.to_id', auth()->user()->id);
+        })
+        ->orderBy('sponser_income.id', 'desc')
+        ->get();
 
-        $globalQuery = DB::table('global_regain')
-            ->join('users as from_users', 'from_users.id', '=', 'global_regain.from_id')
-            ->join('users as to_users', 'to_users.id', '=', 'global_regain.to_id')
-            ->join('payment_reason', 'payment_reason.id', '=', 'global_regain.pay_reason_id')
-            ->select(
-                'global_regain.*',
-                'from_users.user_name as from_username',
-                'from_users.name',
-                'to_users.user_name as to_username',
-                'payment_reason.name as reasonname'
-            )
-            ->where('global_regain.pay_reason_id', 5) 
-            ->when(auth()->user()->id != 1, function ($query) {
-                $query->where('global_regain.to_id', auth()->user()->id);
-            })
-            ->when($from, function ($query) use ($from) {
-                $query->whereDate('global_regain.created_at', '>=', $from);
-            })
-            ->when($to, function ($query) use ($to) {
-                $query->whereDate('global_regain.created_at', '<=', $to);
-            })
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('global_regain.from_id', 'like', "%$search%")
-                    ->orWhere('global_regain.to_id', 'like', "%$search%")
-                    ->orWhere('global_regain.amount', 'like', "%$search%")
-                    ->orWhere('from_users.name', 'like', "%$search%")
-                    ->orWhere('to_users.name', 'like', "%$search%")
-                    ->orWhere('payment_reason.name', 'like', "%$search%");
-                });
-            })
-            ->orderBy('global_regain.id', 'desc')
-            ->get();
+    $uplineQuery = DB::table('upline_income')
+        ->join('users as from_users', 'from_users.id', '=', 'upline_income.from_id')
+        ->join('payment_reason', 'payment_reason.id', '=', 'upline_income.pay_reason_id')
+        ->select(
+            'upline_income.*',
+            'from_users.user_name as from_username',
+            'from_users.name',
+            'payment_reason.name as reasonname'
+        )
+        ->where('upline_income.pay_reason_id', 3) 
+        ->when(auth()->user()->id != 1, function ($query) {
+            $query->where('upline_income.to_id', auth()->user()->id);
+        })
+        ->when($from, function ($query) use ($from) {
+            $query->whereDate('upline_income.created_at', '>=', $from);
+        })
+        ->when($to, function ($query) use ($to) {
+            $query->whereDate('upline_income.created_at', '<=', $to);
+        })
+        ->when($search, function ($query) use ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('upline_income.from_id', 'like', "%$search%")
+                ->orWhere('upline_income.to_id', 'like', "%$search%")
+                ->orWhere('upline_income.amount', 'like', "%$search%")
+                ->orWhere('from_users.name', 'like', "%$search%")
+                ->orWhere('to_users.name', 'like', "%$search%")
+                ->orWhere('payment_reason.name', 'like', "%$search%");
+            });
+        })
+        ->orderBy('upline_income.id', 'desc')
+        ->get();
 
-        return view('admin.payment.upgrade', [
-            'sponserQuery' => $sponserQuery,
-            'uplineQuery' => $uplineQuery,
-            'globalQuery' => $globalQuery,
-            'from' => $from,
-            'to' => $to,
-            'search' => $search
-        ]);
-    }
+    $globalQuery = DB::table('global_regain')
+        ->join('users as from_users', 'from_users.id', '=', 'global_regain.from_id')
+        ->join('payment_reason', 'payment_reason.id', '=', 'global_regain.pay_reason_id')
+        ->select(
+            'global_regain.*',
+            'from_users.user_name as from_username',
+            'from_users.name',
+            'payment_reason.name as reasonname'
+        )
+        ->where('global_regain.pay_reason_id', 4) 
+        ->when(auth()->user()->id != 1, function ($query) {
+            $query->where('global_regain.to_id', auth()->user()->id);
+        })
+        ->when($from, function ($query) use ($from) {
+            $query->whereDate('global_regain.created_at', '>=', $from);
+        })
+        ->when($to, function ($query) use ($to) {
+            $query->whereDate('global_regain.created_at', '<=', $to);
+        })
+        ->when($search, function ($query) use ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('global_regain.from_id', 'like', "%$search%")
+                ->orWhere('global_regain.to_id', 'like', "%$search%")
+                ->orWhere('global_regain.amount', 'like', "%$search%")
+                ->orWhere('from_users.name', 'like', "%$search%")
+                ->orWhere('to_users.name', 'like', "%$search%")
+                ->orWhere('payment_reason.name', 'like', "%$search%");
+            });
+        })
+        ->orderBy('global_regain.id', 'desc')
+        ->get();
 
-    public function travel_allowance(Request $request)
-    {
-        $from = $request->input('from', date('Y-m-01'));
-        $to = $request->input('to', date('Y-m-d'));
-        $search = $request->input('search', '');
+    return view('admin.payment.upgrade', [
+        'sponserQuery' => $sponserQuery,
+        'uplineQuery' => $uplineQuery,
+        'globalQuery' => $globalQuery,
+        'from' => $from,
+        'to' => $to,
+        'search' => $search
+    ]);
+}
 
-
-            $globalQuery = DB::table('global_regain')
-            ->join('users as from_users', 'from_users.id', '=', 'global_regain.from_id')
-            ->join('users as to_users', 'to_users.id', '=', 'global_regain.to_id')
-            ->join('payment_reason', 'payment_reason.id', '=', 'global_regain.pay_reason_id')
-            ->select(
-                'global_regain.*',
-                'from_users.user_name as from_username',
-                'from_users.name as to_username',
-                'payment_reason.name as reasonname'
-            )
-            ->where('global_regain.pay_reason_id', 7) 
-            ->when(auth()->user()->id != 1, function ($query) {
-                $query->where('global_regain.to_id', auth()->user()->id);
-            })
-            ->when($from, function ($query) use ($from) {
-                $query->whereDate('global_regain.created_at', '>=', $from);
-            })
-            ->when($to, function ($query) use ($to) {
-                $query->whereDate('global_regain.created_at', '<=', $to);
-            })
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('global_regain.from_id', 'like', "%$search%")
-                    ->orWhere('global_regain.to_id', 'like', "%$search%")
-                    ->orWhere('global_regain.amount', 'like', "%$search%")
-                    ->orWhere('from_users.name', 'like', "%$search%")
-                    ->orWhere('to_users.name', 'like', "%$search%")
-                    ->orWhere('payment_reason.name', 'like', "%$search%");
-                });
-            })
-            ->orderBy('global_regain.id', 'desc')
-            ->get();
-
-        $uplineQuery = DB::table('upline_income')
-            ->join('users as from_users', 'from_users.id', '=', 'upline_income.from_id')
-            ->join('users as to_users', 'to_users.id', '=', 'upline_income.to_id')
-            ->join('payment_reason', 'payment_reason.id', '=', 'upline_income.pay_reason_id')
-            ->select(
-                'upline_income.*',
-                'from_users.user_name as from_username',
-                'from_users.name as to_username',
-                'payment_reason.name as reasonname'
-            )
-            ->where('upline_income.pay_reason_id', 7) 
-            ->when(auth()->user()->id != 1, function ($query) {
-                $query->where('upline_income.to_id', auth()->user()->id);
-            })
-            ->when($from, function ($query) use ($from) {
-                $query->whereDate('upline_income.created_at', '>=', $from);
-            })
-            ->when($to, function ($query) use ($to) {
-                $query->whereDate('upline_income.created_at', '<=', $to);
-            })
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('upline_income.from_id', 'like', "%$search%")
-                    ->orWhere('upline_income.to_id', 'like', "%$search%")
-                    ->orWhere('upline_income.amount', 'like', "%$search%")
-                    ->orWhere('from_users.name', 'like', "%$search%")
-                    ->orWhere('to_users.name', 'like', "%$search%")
-                    ->orWhere('payment_reason.name', 'like', "%$search%");
-                });
-            })
-            ->orderBy('upline_income.id', 'desc')
-            ->get();
-
-        return view('admin.payment.travel_allowance', [
-            'globalQuery' => $globalQuery,
-            'uplineQuery' => $uplineQuery,
-            'from' => $from,
-            'to' => $to,
-            'search' => $search
-        ]);
-    }
-
-    public function travel_amount(Request $request)
-    {
-        $from = $request->input('from', date('Y-m-01'));
-        $to = $request->input('to', date('Y-m-d'));
-        $search = $request->input('search', '');
-
-        $globalQuery = DB::table('global_regain')
-            ->join('users as from_users', 'from_users.id', '=', 'global_regain.from_id')
-            ->join('users as to_users', 'to_users.id', '=', 'global_regain.to_id')
-            ->join('payment_reason', 'payment_reason.id', '=', 'global_regain.pay_reason_id')
-            ->select(
-                'global_regain.*',
-                'from_users.user_name as from_username',
-                'from_users.name as to_username',
-                'payment_reason.name as reasonname'
-            )
-            ->where('global_regain.pay_reason_id', 6) 
-            ->when(auth()->user()->id != 1, function ($query) {
-                $query->where('global_regain.to_id', auth()->user()->id);
-            })
-            ->when($from, function ($query) use ($from) {
-                $query->whereDate('global_regain.created_at', '>=', $from);
-            })
-            ->when($to, function ($query) use ($to) {
-                $query->whereDate('global_regain.created_at', '<=', $to);
-            })
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('global_regain.from_id', 'like', "%$search%")
-                    ->orWhere('global_regain.to_id', 'like', "%$search%")
-                    ->orWhere('global_regain.amount', 'like', "%$search%")
-                    ->orWhere('from_users.name', 'like', "%$search%")
-                    ->orWhere('to_users.name', 'like', "%$search%")
-                    ->orWhere('payment_reason.name', 'like', "%$search%");
-                });
-            })
-            ->orderBy('global_regain.id', 'desc')
-            ->get();
-
-        $uplineQuery = DB::table('upline_income')
-            ->join('users as from_users', 'from_users.id', '=', 'upline_income.from_id')
-            ->join('users as to_users', 'to_users.id', '=', 'upline_income.to_id')
-            ->join('payment_reason', 'payment_reason.id', '=', 'upline_income.pay_reason_id')
-            ->select(
-                'upline_income.*',
-                'from_users.user_name as from_username',
-                'from_users.name as to_username',
-                'payment_reason.name as reasonname'
-            )
-            ->where('upline_income.pay_reason_id', 6) 
-            ->when(auth()->user()->id != 1, function ($query) {
-                $query->where('upline_income.to_id', auth()->user()->id);
-            })
-            ->when($from, function ($query) use ($from) {
-                $query->whereDate('upline_income.created_at', '>=', $from);
-            })
-            ->when($to, function ($query) use ($to) {
-                $query->whereDate('upline_income.created_at', '<=', $to);
-            })
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('upline_income.from_id', 'like', "%$search%")
-                    ->orWhere('upline_income.to_id', 'like', "%$search%")
-                    ->orWhere('upline_income.amount', 'like', "%$search%")
-                    ->orWhere('from_users.name', 'like', "%$search%")
-                    ->orWhere('to_users.name', 'like', "%$search%")
-                    ->orWhere('payment_reason.name', 'like', "%$search%");
-                });
-            })
-            ->orderBy('upline_income.id', 'desc')
-            ->get();
-
-        return view('admin.payment.travel_amount', [
-            'globalQuery' => $globalQuery,
-            'uplineQuery' => $uplineQuery,
-            'from' => $from,
-            'to' => $to,
-            'search' => $search
-        ]);
-    }
 
 }

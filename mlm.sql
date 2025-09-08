@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 06, 2025 at 06:55 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Sep 08, 2025 at 06:54 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -197,6 +197,7 @@ CREATE TABLE `global_regain` (
   `to_id` int(11) DEFAULT NULL,
   `pay_reason_id` int(11) DEFAULT NULL,
   `amount` varchar(10) DEFAULT NULL,
+  `global_regain_amount` varchar(20) DEFAULT NULL,
   `level` int(11) DEFAULT NULL,
   `payment_status` varchar(20) DEFAULT NULL,
   `message` varchar(200) DEFAULT NULL,
@@ -204,6 +205,17 @@ CREATE TABLE `global_regain` (
   `status` int(11) NOT NULL DEFAULT 0,
   `created_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `global_regain`
+--
+
+INSERT INTO `global_regain` (`id`, `plan_id`, `user_type_id`, `from_id`, `to_id`, `pay_reason_id`, `amount`, `global_regain_amount`, `level`, `payment_status`, `message`, `log_id`, `status`, `created_at`) VALUES
+(1, 1, 3, 1, 2, 2, '1', '0', 1, '1', 'Global regain Income', 2, 0, '2025-08-26 12:42:29'),
+(2, 2, 3, 1, 2, 2, NULL, '0', NULL, NULL, NULL, NULL, 0, NULL),
+(3, 3, 3, 1, 2, 2, NULL, '0', NULL, NULL, NULL, NULL, 0, NULL),
+(4, 4, 3, 1, 2, 2, NULL, '0', NULL, NULL, NULL, NULL, 0, NULL),
+(5, 5, 3, 1, 2, 2, NULL, '0', NULL, NULL, NULL, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -277,12 +289,9 @@ CREATE TABLE `payment_reason` (
 INSERT INTO `payment_reason` (`id`, `name`) VALUES
 (1, 'Sponser'),
 (2, 'Global Rebirth'),
-(3, 'Level'),
-(4, 'Upline Sponser'),
-(5, 'Upgrade'),
-(6, 'Travel Amount'),
-(7, 'Travel Allownace'),
-(8, 'Admin');
+(3, 'Upline Sponser'),
+(4, 'Upgrade'),
+(5, 'Admin');
 
 -- --------------------------------------------------------
 
@@ -295,16 +304,8 @@ CREATE TABLE `plans` (
   `plan_name` varchar(20) DEFAULT NULL,
   `plan_amount` varchar(20) DEFAULT NULL,
   `sponser_amount` varchar(20) DEFAULT NULL,
-  `level_amount` varchar(20) DEFAULT NULL,
   `upline_amount` varchar(20) DEFAULT NULL,
   `regain_amount` varchar(20) DEFAULT NULL,
-  `shib_coin` varchar(20) DEFAULT NULL,
-  `pepe_coin` varchar(20) DEFAULT NULL,
-  `bonk_coin` varchar(20) DEFAULT NULL,
-  `floki_coin` varchar(20) DEFAULT NULL,
-  `btt_coin` varchar(20) DEFAULT NULL,
-  `baby_doge_coin` varchar(20) DEFAULT NULL,
-  `tfc_coin` varchar(20) DEFAULT NULL,
   `status` varchar(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
@@ -314,12 +315,12 @@ CREATE TABLE `plans` (
 -- Dumping data for table `plans`
 --
 
-INSERT INTO `plans` (`id`, `plan_name`, `plan_amount`, `sponser_amount`, `level_amount`, `upline_amount`, `regain_amount`, `shib_coin`, `pepe_coin`, `bonk_coin`, `floki_coin`, `btt_coin`, `baby_doge_coin`, `tfc_coin`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Health', '500', '250', '10', '100', '100', '50', '50', '50', '50', '50', '50', '50', '1', '2025-08-14 14:44:08', '2025-09-06 10:19:16'),
-(2, 'Happiness', '2000', '1000', '10', '400', '400', '250', '250', '250', '250', '250', '250', '250', '1', '2025-08-14 14:45:22', '2025-09-06 10:20:11'),
-(3, 'Envirolment', '5000', '2500', '10', '1000', '1000', '500', '500', '500', '500', '500', '500', '500', '1', '2025-08-14 14:45:55', '2025-09-06 10:20:57'),
-(4, 'Spritnal', '7000', '3500', '10', '1400', '1400', '1000', '1000', '1000', '1000', '1000', '1000', '1000', '1', '2025-08-14 14:46:22', '2025-09-06 10:21:36'),
-(5, 'Economical', '9000', '4500', '10', '1800', '1800', '2000', '2000', '2000', '2000', '2000', '2000', '2000', '1', '2025-08-14 14:46:52', '2025-09-06 10:23:37');
+INSERT INTO `plans` (`id`, `plan_name`, `plan_amount`, `sponser_amount`, `upline_amount`, `regain_amount`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Health', '500', '250', '100', '100', '1', '2025-08-14 14:44:08', '2025-09-06 10:19:16'),
+(2, 'Happiness', '2000', '1000', '400', '400', '1', '2025-08-14 14:45:22', '2025-09-06 10:20:11'),
+(3, 'Envirolment', '5000', '2500', '1000', '1000', '1', '2025-08-14 14:45:55', '2025-09-06 10:20:57'),
+(4, 'Spritnal', '7000', '3500', '1400', '1400', '1', '2025-08-14 14:46:22', '2025-09-06 10:21:36'),
+(5, 'Economical', '9000', '4500', '1800', '1800', '1', '2025-08-14 14:46:52', '2025-09-06 10:23:37');
 
 -- --------------------------------------------------------
 
@@ -433,30 +434,21 @@ CREATE TABLE `users` (
   `theme` varchar(10) DEFAULT NULL,
   `referral_code` varchar(30) DEFAULT NULL,
   `global_rebirth_amount` varchar(10) DEFAULT NULL,
-  `travel_allownace` varchar(10) DEFAULT NULL,
-  `travel_amount` varchar(10) DEFAULT NULL,
-  `upgrade` varchar(10) DEFAULT NULL,
-  `travel_international_tour` varchar(10) DEFAULT NULL,
-  `travel_national_tour` varchar(10) DEFAULT NULL,
-  `travel_local_tour` varchar(10) DEFAULT NULL,
-  `ta_international_tour` varchar(10) DEFAULT NULL,
-  `ta_national_tour` varchar(10) DEFAULT NULL,
-  `ta_local_tour` varchar(10) DEFAULT NULL,
-  `shib_coin` int(10) DEFAULT 0,
-  `pepe_coin` int(10) DEFAULT 0,
-  `bonk_coin` int(10) DEFAULT 0,
-  `floki_coin` int(10) DEFAULT 0,
-  `btt_coin` int(10) DEFAULT 0,
-  `baby_doge_coin` int(10) DEFAULT 0,
-  `tfc_coin` int(10) DEFAULT 0
+  `upgrade` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `global_id`, `referral_id`, `user_type_id`, `name`, `user_name`, `email`, `email_verified_at`, `password`, `cpassword`, `wallet`, `status`, `phone`, `whatsapp_number`, `address`, `wallet_address`, `remember_token`, `photo`, `created_at`, `updated_at`, `plan_id`, `message`, `fcm_token`, `theme`, `referral_code`, `global_rebirth_amount`, `travel_allownace`, `travel_amount`, `upgrade`, `travel_international_tour`, `travel_national_tour`, `travel_local_tour`, `ta_international_tour`, `ta_national_tour`, `ta_local_tour`, `shib_coin`, `pepe_coin`, `bonk_coin`, `floki_coin`, `btt_coin`, `baby_doge_coin`, `tfc_coin`) VALUES
-(1, 0, NULL, 1, 'Admin', 'TFC1000', 'tfc@gmail.com', NULL, '$2y$10$w3UCJFqhijngNBLVU1cwmecl3TvpwmdLVgHGnjtG7WOmlhkOzkrFy', '12345678', '800.45', 1, '9876543210', NULL, NULL, '0x7509dEb5a6367E094BA35ac8f8F7b2c1997654f7', NULL, 'upload/profile_photo/1.png', '2025-08-14 16:43:22', '2025-08-26 09:44:56', 7, 'Nonvisitor', 'eK7FIO_zthVCNgi6MjfvCR:APA91bEvoDpqYrhIXNUSH5eZio-obveHbeY52srANxuK44xIENuiYtzYGGTsNLrZSRy-iGckPwcir9PZYt_tauxazpHH6rks_LoJdfxLr_hFAFUR0b_XCLk', 'bg-theme13', NULL, '0', '0.5', '0.3', '1.1', '0.0225', '0.015', '0.0075', '0', '0', '0', 10800, 10800, 10800, 10800, 10800, 10800, 10800);
+INSERT INTO `users` (`id`, `global_id`, `referral_id`, `user_type_id`, `name`, `user_name`, `email`, `email_verified_at`, `password`, `cpassword`, `wallet`, `status`, `phone`, `whatsapp_number`, `address`, `wallet_address`, `remember_token`, `photo`, `created_at`, `updated_at`, `plan_id`, `message`, `fcm_token`, `theme`, `referral_code`, `global_rebirth_amount`, `upgrade`) VALUES
+(1, 1, NULL, 1, 'Admin', 'TFC1000', 'tfc@gmail.com', NULL, '$2y$10$w3UCJFqhijngNBLVU1cwmecl3TvpwmdLVgHGnjtG7WOmlhkOzkrFy', '12345678', '800.45', 1, '9876543210', NULL, NULL, '0x7509dEb5a6367E094BA35ac8f8F7b2c1997654f7', NULL, 'upload/profile_photo/1.png', '2025-08-14 16:43:22', '2025-09-08 04:49:40', 0, 'Nonvisitor', 'eK7FIO_zthVCNgi6MjfvCR:APA91bEvoDpqYrhIXNUSH5eZio-obveHbeY52srANxuK44xIENuiYtzYGGTsNLrZSRy-iGckPwcir9PZYt_tauxazpHH6rks_LoJdfxLr_hFAFUR0b_XCLk', 'bg-theme13', NULL, '0', '0'),
+(2, 2, 1, 3, 'Testing1', 'TFC1001', 'testing090@gmail.com', NULL, '$2y$10$eNkqNTUsTWo6YaOE1a.OyemJbN.mQzAC5EQTSn2nRmKhl6QgRRYF2', '12345678', NULL, 1, '918565987834', '918565987834', NULL, '1234567qwertyukl;', NULL, 'upload/profile_photo/user.png', '2025-09-06 06:16:18', '2025-09-08 04:32:35', 0, 'Nonvisitor', NULL, NULL, NULL, '0', '0'),
+(9, NULL, 2, 3, 'Akil', 'TFC1002', 'akil@gmail.com', NULL, '$2y$10$n4oZZmePiJzCQ28q1icopu8JugCqHL1KVhrPNfAOV30Bv3uP75N32', '12345678', NULL, 1, '918825456445', '918825456445', NULL, '123456789qwertyuio', NULL, 'upload/profile_photo/user.png', '2025-09-08 04:09:04', '2025-09-08 04:32:35', 0, 'Nonvisitor', NULL, NULL, NULL, NULL, '0'),
+(10, NULL, 9, 3, 'Joshua', 'TFC1009', 'joshua@gmail.com', NULL, '$2y$10$lsIOE60jSoMdqXgMUJ1M7ualWcgtCTNfhqaKCHYJYD8w67Ki/hzq.', '12345678', NULL, 1, '919876543212', '919876543212', NULL, '123456789qwertyuio', NULL, 'upload/profile_photo/user.png', '2025-09-08 04:32:10', '2025-09-08 04:39:29', 0, 'Nonvisitor', NULL, NULL, NULL, NULL, '0'),
+(11, 11, 10, 3, 'Ajay', 'TFC1010', 'ajay@gmail.com', NULL, '$2y$10$4WLVcrQea.JqYDRnJ7PALuRUd0Qh89cdETv.u5ZG07j.zzNaCn4jS', '12345678', NULL, 1, '918789789878', '918789789878', NULL, '123456789asdfghjklzxcvbnm,', NULL, 'upload/profile_photo/user.png', '2025-09-08 04:39:19', '2025-09-08 04:43:51', 0, 'Nonvisitor', NULL, NULL, NULL, '0', '0'),
+(12, 12, 11, 3, 'Jesin', 'TFC1011', 'jesin@gmail.com', NULL, '$2y$10$OQJl4t8snfVHGsvnpXFJDeooRVSfWK0LVv3qBo1B4ekWZGxEc6D/i', '12345678', NULL, 1, '919090909090', '919090909090', NULL, '1234567dftyudcvbnm', NULL, 'upload/profile_photo/user.png', '2025-09-08 04:43:42', '2025-09-08 04:49:40', 0, 'Nonvisitor', NULL, NULL, NULL, '0', '0'),
+(13, 13, 12, 3, 'Suriya', 'TFC1012', 'suriya@gmail.com', NULL, '$2y$10$hTOrvq3HPgNbE2LOnA0fwuLZ0br/VwWpkbTo/xaX4q791yScLKUPi', '12345678', NULL, 1, '919878987898', '919878987898', NULL, 'asdfghj2345678', NULL, 'upload/profile_photo/user.png', '2025-09-08 04:49:30', '2025-09-08 04:49:40', 0, 'Nonvisitor', NULL, NULL, NULL, '0', NULL);
 
 -- --------------------------------------------------------
 
@@ -641,7 +633,7 @@ ALTER TABLE `countries`
 -- AUTO_INCREMENT for table `global_regain`
 --
 ALTER TABLE `global_regain`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -689,7 +681,7 @@ ALTER TABLE `upline_income`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `user_plan`

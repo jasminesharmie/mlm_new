@@ -499,7 +499,7 @@ public function kannanaaaaa() {
           $adminCommission    = ($amount * 5) / 100;
   
           // Self bonus
-          $this->storeSponserPayment('Rebirth', $planId, $userId, $currentUser->referral_id, 1, '5', $refralupgradeCommission, 1, "Referral Upgrade Bonus",'3');
+          $this->storeSponserPayment('Rebirth', $planId, $userId, $currentUser->referral_id, 1, '4', $refralupgradeCommission, 1, "Referral Upgrade Bonus",'3');
   
           // Referrer bonus
           if (!empty($currentUser->referral_id)) {
@@ -510,7 +510,7 @@ public function kannanaaaaa() {
   
           // Admin bonus
           if ($adminCommission > 0) {
-              $this->storeSponserPayment('Rebirth', $planId, $userId, 1, 1, '8', $adminCommission, 1, "Admin Bonus Upgrade",'3');
+              $this->storeSponserPayment('Rebirth', $planId, $userId, 1, 1, '5', $adminCommission, 1, "Admin Bonus Upgrade",'3');
           }
   
           // ================= Upline Commission (20%) =================
@@ -526,7 +526,7 @@ public function kannanaaaaa() {
               $uplinerId = 1; // fallback to admin
           }
   
-          $this->storeUplinePayment('Upline', $planId, $userId, $uplinerId, $planId, '4', $commissionAmount, 1, "Upline Sponsor",'3');
+          $this->storeUplinePayment('Upline', $planId, $userId, $uplinerId, $planId, '3', $commissionAmount, 1, "Upline Sponsor",'3');
   
           // ================= Global Regain (20%) =================
           $rotatingCommissionAmount = ($amount * 20) / 100; // 20%
@@ -548,7 +548,7 @@ public function kannanaaaaa() {
   
               $parentId = $globalregainsssar->to_id;
   
-              if ($globalregain == 19) {
+              if ($globalregain == 4) {
                   if ($userId != 2) {
                       $this->storeGlobalPayment('PlanTree', $planId, $parentId, $userId, 1, '2', $rotatingCommissionAmount, 1, "Global Regain Income", '3', 0);
                   }
@@ -648,7 +648,7 @@ public function kannanaaaaa() {
             $adminCommission    = ($amount * 5) / 100;
 
             // Self bonus
-            $this->storeSponserPayment('Rebirth', $planId, $userId, $currentUser->referral_id, 1, '5', $refralupgradeCommission, 1, "Referal Upgrade Bonus - Global Regain",'4');
+            $this->storeSponserPayment('Rebirth', $planId, $userId, $currentUser->referral_id, 1, '4', $refralupgradeCommission, 1, "Referal Upgrade Bonus - Global Regain",'4');
 
             //  Referrer bonus
             if (!empty($currentUser->referral_id)) {
@@ -659,7 +659,7 @@ public function kannanaaaaa() {
 
             // Admin bonus (set to 0 if you want ONLY the rotating 20% path)
             if ($adminCommission > 0) {
-                $this->storeSponserPayment('Rebirth', $planId, $userId, 1, 1, '8', $adminCommission, 1, "Admin Bonus Upgrade",'4');
+                $this->storeSponserPayment('Rebirth', $planId, $userId, 1, 1, '5', $adminCommission, 1, "Admin Bonus Upgrade",'4');
             }
 
         
@@ -706,7 +706,7 @@ public function kannanaaaaa() {
 
             $parentId = $globalregainsssar->to_id;
 
-            if($globalregain == 19) {
+            if($globalregain == 4) {
 
                 $this->storeGlobalPayment('PlanTree',$planId,$parentId,$userId,1,'2',$rotatingCommissionAmount,1,"Global regain Income - Global Regain",'4',0);
                 

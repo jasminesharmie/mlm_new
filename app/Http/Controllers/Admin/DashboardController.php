@@ -97,9 +97,9 @@ class DashboardController extends Controller
 
         
 
-        $uplineIncome = DB::table('upline_income')->where('to_id', auth()->user()->id)->where('pay_reason_id', '4')->sum('amount');
+        $uplineIncome = DB::table('upline_income')->where('to_id', auth()->user()->id)->where('pay_reason_id', '3')->sum('amount');
         $LastWeekInuplineIncome = DB::table('upline_income')
-        ->where('pay_reason_id', '4')
+        ->where('pay_reason_id', '3')
         ->where('to_id', auth()->user()->id)
         ->whereDate('created_at','>=', $weekStart)->whereDate('created_at','<=', $weekEnd)
         ->sum('amount');
@@ -123,30 +123,18 @@ class DashboardController extends Controller
 				->count();
         }
 
-        $coinDetails = [
-            'shib_coin'      => Auth::user()->shib_coin,
-            'pepe_coin'      => Auth::user()->pepe_coin,
-            'bonk_coin'      => Auth::user()->bonk_coin,
-            'floki_coin'     => Auth::user()->floki_coin,
-            'btt_coin'       => Auth::user()->btt_coin,
-            'baby_doge_coin' => Auth::user()->baby_doge_coin,
-            'tfc_coin'       => Auth::user()->tfc_coin,
-        ];
+       
         
-        $total_coin = array_sum($coinDetails);
-        
-        $GRTravel = DB::table('global_regain')->where('pay_reason_id', 6)->where('from_id', auth()->user()->id)->sum('amount');
-        $GRTravelAllo = DB::table('global_regain')->where('pay_reason_id', 7)->where('from_id', auth()->user()->id)->sum('amount');
-        $GRUpgrade = DB::table('global_regain')->where('pay_reason_id', 5)->where('from_id', auth()->user()->id)->sum('amount');
-        $GRAdmin = DB::table('global_regain')->where('pay_reason_id', 8)->where('from_id', auth()->user()->id)->sum('amount');
-        $GRTotal = $GRTravel + $GRTravelAllo + $GRUpgrade + $GRAdmin;
+       
+        $GRUpgrade = DB::table('global_regain')->where('pay_reason_id', 4)->where('from_id', auth()->user()->id)->sum('amount');
+        $GRAdmin = DB::table('global_regain')->where('pay_reason_id', 5)->where('from_id', auth()->user()->id)->sum('amount');
+        $GRTotal = $GRUpgrade + $GRAdmin;
 
 
-        $UPTravel = DB::table('upline_income')->where('pay_reason_id', 6)->where('to_id', auth()->user()->id)->sum('amount');
-        $UPTravelAllo = DB::table('upline_income')->where('pay_reason_id', 7)->where('to_id', auth()->user()->id)->sum('amount');
-        $UPUpgrade = DB::table('upline_income')->where('pay_reason_id', 5)->where('to_id', auth()->user()->id)->sum('amount');
-        $UPAdmin = DB::table('upline_income')->where('pay_reason_id', 8)->where('to_id', auth()->user()->id)->sum('amount');
-        $UPTotal = $UPTravel + $UPTravelAllo + $UPUpgrade + $UPAdmin;
+       
+        $UPUpgrade = DB::table('upline_income')->where('pay_reason_id', 4)->where('to_id', auth()->user()->id)->sum('amount');
+        $UPAdmin = DB::table('upline_income')->where('pay_reason_id', 5)->where('to_id', auth()->user()->id)->sum('amount');
+        $UPTotal = $UPUpgrade + $UPAdmin;
 
         $rebirthIncome = $GRTotal;
 
@@ -164,23 +152,23 @@ class DashboardController extends Controller
 
 
         $sponserQuery = DB::table('sponser_income')
-        ->where('pay_reason_id', 8) 
+        ->where('pay_reason_id', 5) 
         ->where('to_id', 1)
         ->sum('amount');
 
         $uplineQuery = DB::table('upline_income')
-        ->where('pay_reason_id', 8) 
+        ->where('pay_reason_id', 5) 
         ->where('to_id', 1)
         ->sum('amount');
 
         $globalQuery = DB::table('global_regain')
-        ->where('pay_reason_id', 8) 
+        ->where('pay_reason_id', 5) 
         ->where('to_id', 1)
         ->sum('amount');
 
         $totalAdminAmount = $sponserQuery + $uplineQuery + $globalQuery;
 
-        return view('admin.dashboard', compact('total_coin', 'coinDetails','ActiveMembers', 'InactiveMembers', 'LastWeekActiveMembers', 'LastWeekInactiveMembers', 'nextPlanName', 'remainingPlansCount', 'uplineIncome', 'LastWeekInuplineIncome', 'LastWeekwalletIncome', 'sponserIncome', 'LastWeeksponserIncome','rebirthIncome','LastWeekrebirthIncome','Withdrawal','LastWeekWithdrawal','GRTravel','GRTravelAllo','GRUpgrade','GRAdmin','GRTotal','UPTravel','UPTravelAllo','UPUpgrade','UPAdmin','UPTotal','plans','userPlans','nextPlanId', 'totalAdminAmount'));
+        return view('admin.dashboard', compact('ActiveMembers', 'InactiveMembers', 'LastWeekActiveMembers', 'LastWeekInactiveMembers', 'nextPlanName', 'remainingPlansCount', 'uplineIncome', 'LastWeekInuplineIncome', 'LastWeekwalletIncome', 'sponserIncome', 'LastWeeksponserIncome','rebirthIncome','LastWeekrebirthIncome','Withdrawal','LastWeekWithdrawal','GRUpgrade','GRAdmin','GRTotal','UPUpgrade','UPAdmin','UPTotal','plans','userPlans','nextPlanId', 'totalAdminAmount'));
     }
 	
 
